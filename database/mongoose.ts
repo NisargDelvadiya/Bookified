@@ -1,9 +1,5 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) throw new Error('Please define the MONGODB_URI environment variable');
-
 declare global {
     var mongooseCache: {
         conn: typeof mongoose | null
@@ -11,9 +7,15 @@ declare global {
     }
 }
 
-let cached = global.mongooseCache || (global.mongooseCache = { conn: null, promise: null });
+const cached = global.mongooseCache || (global.mongooseCache = { conn: null, promise: null });
 
 export const connectToDatabase = async () => {
+    const MONGODB_URI = process.env.MONGODB_URI;
+
+    if (!MONGODB_URI) {
+        throw new Error('Please define the MONGODB_URI environment variable in your .env file');
+    }
+
     if (cached.conn) return cached.conn;
 
     if (!cached.promise) {
@@ -24,7 +26,7 @@ export const connectToDatabase = async () => {
         cached.conn = await cached.promise;
     } catch (e) {
         cached.promise = null;
-        console.error('MongoDB connection error. Please make sure MongoDB is running. ' + e);
+        console.error('MongoDB connection error. Please make sure MongoDB is running: ' + e);
         throw e;
     }
 
