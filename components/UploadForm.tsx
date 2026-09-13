@@ -51,6 +51,7 @@ const UploadForm = () => {
         // PostHog -> Track Book Uploads...
 
         try {
+            console.log("Step 1: Checking if book exists...");
             const existsCheck = await checkBookExists(data.title);
 
             if(existsCheck.exists && existsCheck.book) {
@@ -63,22 +64,27 @@ const UploadForm = () => {
             const fileTitle = data.title.replace(/\s+/g, '-').toLowerCase();
             const pdfFile = data.pdfFile;
 
+            console.log("Step 2: Parsing PDF pages...");
             const parsedPDF = await parsePDFFile(pdfFile);
+            console.log(`Parsed ${parsedPDF.content.length} segments from PDF.`);
 
             if(parsedPDF.content.length === 0) {
                 toast.error("Failed to parse PDF. Please try again with a different file.");
                 return;
             }
 
+            console.log("Step 3: Uploading PDF to Vercel Blob...");
             const uploadedPdfBlob = await upload(fileTitle, pdfFile, {
                 access: 'public',
                 handleUploadUrl: '/api/upload',
                 contentType: 'application/pdf'
             });
+            console.log("PDF uploaded:", uploadedPdfBlob.url);
 
             let coverUrl: string;
 
             if(data.coverImage) {
+                console.log("Uploading custom cover...");
                 const coverFile = data.coverImage;
                 const uploadedCoverBlob = await upload(`${fileTitle}_cover.png`, coverFile, {
                     access: 'public',
@@ -87,6 +93,7 @@ const UploadForm = () => {
                 });
                 coverUrl = uploadedCoverBlob.url;
             } else {
+                console.log("Uploading auto-generated cover...");
                 const response = await fetch(parsedPDF.cover)
                 const blob = await response.blob();
 
@@ -98,6 +105,7 @@ const UploadForm = () => {
                 coverUrl = uploadedCoverBlob.url;
             }
 
+            console.log("Step 4: Creating Book in database...");
             const book = await createBook({
                 clerkId: userId,
                 title: data.title,
@@ -124,6 +132,7 @@ const UploadForm = () => {
                 return;
             }
 
+            console.log("Step 5: Saving text segments to database...");
             const segments = await saveBookSegments(book.data._id, userId, parsedPDF.content);
 
             if(!segments.success) {
@@ -131,6 +140,7 @@ const UploadForm = () => {
                 throw new Error("Failed to save book segments");
             }
 
+            console.log("Upload & synthesis complete!");
             form.reset();
             router.push('/');
         } catch (error) {
