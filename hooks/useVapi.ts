@@ -27,15 +27,19 @@ const TIMER_INTERVAL_MS = 1000;
 const SECONDS_PER_MINUTE = 60;
 const TIME_WARNING_THRESHOLD = 60; // Show warning when this many seconds remain
 
-let vapi: InstanceType<typeof Vapi>;
-function getVapi() {
-    if (!vapi) {
-        if (!VAPI_API_KEY) {
-            throw new Error('NEXT_PUBLIC_VAPI_API_KEY environment variable is not set');
-        }
-        vapi = new Vapi(VAPI_API_KEY);
+let vapiInstance: InstanceType<typeof Vapi> | null = null;
+
+function getVapi(): InstanceType<typeof Vapi> | null {
+    if (typeof window === 'undefined') return null;
+    const apiKey = process.env.NEXT_PUBLIC_VAPI_API_KEY;
+    if (!apiKey) {
+        console.warn('NEXT_PUBLIC_VAPI_API_KEY environment variable is not set.');
+        return null;
     }
-    return vapi;
+    if (!vapiInstance) {
+        vapiInstance = new Vapi(apiKey);
+    }
+    return vapiInstance;
 }
 
 export type CallStatus = 'idle' | 'connecting' | 'starting' | 'listening' | 'thinking' | 'speaking';
@@ -65,6 +69,9 @@ export function useVapi(book: IBook) {
 
     // Set up Vapi event listeners
     useEffect(() => {
+        const instance = getVapi();
+        if (!instance) return;
+
         const handlers = {
             'call-start': () => {
                 isStoppingRef.current = false;
@@ -82,7 +89,7 @@ export function useVapi(book: IBook) {
 
                         // Check duration limit
                         if (newDuration >= maxDurationRef.current) {
-                            getVapi().stop();
+                            instance.stop();
                             setLimitError(
                                 `Session time limit (${Math.floor(
                                     maxDurationRef.current / SECONDS_PER_MINUTE,
@@ -207,13 +214,13 @@ export function useVapi(book: IBook) {
 
         // Register all handlers
         Object.entries(handlers).forEach(([event, handler]) => {
-            getVapi().on(event as keyof typeof handlers, handler as () => void);
+            instance.on(event as keyof typeof handlers, handler as () => void);
         });
 
         return () => {
             // End active session on unmount
             if (sessionIdRef.current) {
-                getVapi().stop();
+                instance.stop();
                 endVoiceSession(sessionIdRef.current, durationRef.current).catch((err) =>
                     console.error('Failed to end voice session on unmount:', err),
                 );
@@ -221,7 +228,7 @@ export function useVapi(book: IBook) {
             }
             // Cleanup handlers
             Object.entries(handlers).forEach(([event, handler]) => {
-                getVapi().off(event as keyof typeof handlers, handler as () => void);
+                instance.off(event as keyof typeof handlers, handler as () => void);
             });
             if (timerRef.current) clearInterval(timerRef.current);
         };
@@ -230,6 +237,12 @@ export function useVapi(book: IBook) {
     const start = useCallback(async () => {
         if (!userId) {
             setLimitError('Please sign in to start a voice session.');
+            return;
+        }
+
+        const instance = getVapi();
+        if (!instance) {
+            setLimitError('Vapi Public API Key (NEXT_PUBLIC_VAPI_API_KEY) is not set in environment variables.');
             return;
         }
 
@@ -249,12 +262,10 @@ export function useVapi(book: IBook) {
             }
 
             sessionIdRef.current = result.sessionId || null;
-            // Note: Server-returned maxDurationMinutes is informational only
-            // The actual limit is enforced by useLatestRef(limits.maxSessionMinutes * 60)
 
             const firstMessage = `Hey, good to meet you. Quick question before we dive in - have you actually read ${book.title} yet, or are we starting fresh?`;
 
-            await getVapi().start(ASSISTANT_ID, {
+            await instance.start(ASSISTANT_ID, {
                 firstMessage,
                 variableValues: {
                     title: book.title,
@@ -280,7 +291,8 @@ export function useVapi(book: IBook) {
 
     const stop = useCallback(() => {
         isStoppingRef.current = true;
-        getVapi().stop();
+        const instance = getVapi();
+        instance?.stop();
     }, []);
 
     const clearError = useCallback(() => {
