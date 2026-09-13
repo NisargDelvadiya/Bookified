@@ -20,8 +20,53 @@ const monaSans = Mona_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Bookified",
-  description: "Transform your books into interactive AI conversations. Upload PDFs, and chat with your books using voice.",
+  title: {
+    default: "Bookified — Turn Any Book into an Interactive AI Voice Conversation",
+    template: "%s | Bookified",
+  },
+  description:
+    "Don't just read books — talk with them. Bookified transforms your PDFs into living, interactive AI reading companions with real-time voice synthesis, chapter intelligence, and instant conversational insights.",
+  authors: [
+    {
+      name: "Nisarg Jayesh Delvadiya",
+      url: "https://github.com/NisargDelvadiya",
+    },
+  ],
+  creator: "Nisarg Jayesh Delvadiya",
+  publisher: "Nisarg Jayesh Delvadiya",
+  keywords: [
+    "Bookified",
+    "AI Book Companion",
+    "Interactive Reading",
+    "Voice AI",
+    "Conversational AI",
+    "PDF to Voice",
+    "ElevenLabs",
+    "Vapi AI",
+    "Next.js 16",
+    "Smart Library",
+    "AI Study Assistant",
+    "Real-time Voice Chat",
+    "Audiobooks",
+    "Nisarg Delvadiya",
+    "Nisarg Jayesh Delvadiya",
+  ],
+  openGraph: {
+    title: "Bookified — Turn Any Book into an Interactive AI Voice Conversation",
+    description:
+      "Don't just read books — talk with them. Transform your PDFs into real-time interactive voice conversations.",
+    url: "https://bookified.vercel.app",
+    siteName: "Bookified",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bookified — Turn Any Book into an Interactive AI Voice Conversation",
+    description:
+      "Don't just read books — talk with them. Transform your PDFs into real-time interactive voice conversations.",
+    creator: "@NisargDelvadiya",
+  },
   icons: {
     icon: [
       { url: "/favicon/favicon-96x96.png?v=20260913", sizes: "96x96", type: "image/png" },
