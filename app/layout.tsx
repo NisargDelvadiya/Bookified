@@ -89,7 +89,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      publishableKey={
+        process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+        "pk_test_Y2xlcmsuYm9va2lmaWVkLmRldmVsJA"
+      }
+    >
         <html lang="en">
           <head>
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png?v=20260913" sizes="96x96" />
