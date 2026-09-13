@@ -1,33 +1,54 @@
-import {NextResponse} from "next/server";
-import {handleUpload, HandleUploadBody} from "@vercel/blob/client";
-import {auth} from "@clerk/nextjs/server";
-import {MAX_FILE_SIZE} from "@/lib/constants";
+import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
+import { handleUpload, HandleUploadBody } from "@vercel/blob/client";
+import { auth } from "@clerk/nextjs/server";
+import { MAX_FILE_SIZE } from "@/lib/constants";
 
 export async function POST(request: Request): Promise<NextResponse> {
     try {
-        const body = (await request.json()) as HandleUploadBody;
+        const { userId } = await auth();
+
+        if (!userId) {
+            return NextResponse.json({ error: "Unauthorized: User not authenticated" }, { status: 401 });
+        }
 
         const token = process.env.BLOB_READ_WRITE_TOKEN || process.env.bookified_READ_WRITE_TOKEN;
 
         if (!token) {
             console.error("BLOB_READ_WRITE_TOKEN is missing in environment variables!");
             return NextResponse.json(
-                { error: "BLOB_READ_WRITE_TOKEN is not configured on the server." },
+                { error: "BLOB_READ_WRITE_TOKEN is not configured on the server. Please add it to your environment variables." },
                 { status: 500 }
             );
         }
 
+        const contentType = request.headers.get("content-type") || "";
+
+        // Direct FormData upload (CORS-free and reliable across all domains)
+        if (contentType.includes("multipart/form-data")) {
+            const formData = await request.formData();
+            const file = formData.get("file") as File | null;
+            const filename = (formData.get("filename") as string) || file?.name || "file.pdf";
+
+            if (!file) {
+                return NextResponse.json({ error: "No file provided" }, { status: 400 });
+            }
+
+            const blob = await put(filename, file, {
+                access: "public",
+                token,
+            });
+
+            return NextResponse.json(blob);
+        }
+
+        // Fallback for client-side handleUpload
+        const body = (await request.json()) as HandleUploadBody;
         const jsonResponse = await handleUpload({
             token,
             body,
             request,
             onBeforeGenerateToken: async () => {
-                const { userId } = await auth();
-
-                if(!userId) {
-                    throw new Error('Unauthorized: User not authenticated');
-                }
-
                 return {
                     allowedContentTypes: ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'],
                     addRandomSuffix: true,
@@ -37,16 +58,14 @@ export async function POST(request: Request): Promise<NextResponse> {
             },
             onUploadCompleted: async ({ blob, tokenPayload }) => {
                 console.log('File uploaded to blob: ', blob.url, tokenPayload);
-                // Post-upload hook
             }
         });
 
-        return NextResponse.json(jsonResponse)
+        return NextResponse.json(jsonResponse);
     } catch (e) {
         const message = e instanceof Error ? e.message : "An unknown error occurred";
         const status = message.includes('Unauthorized') ? 401 : 500;
-        console.error('Upload error', e);
-        const clientMessage = status === 401 ? 'Unauthorized' : 'Upload failed';
-        return NextResponse.json({ error: clientMessage }, { status });
+        console.error('Upload error:', e);
+        return NextResponse.json({ error: message || 'Upload failed' }, { status });
     }
 }

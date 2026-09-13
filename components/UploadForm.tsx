@@ -17,8 +17,24 @@ import { useAuth } from "@clerk/nextjs";
 import { toast } from 'sonner';
 import {checkBookExists, createBook, saveBookSegments} from "@/lib/actions/book.actions";
 import {useRouter} from "next/navigation";
-import {parsePDFFile} from "@/lib/utils";
-import {upload} from "@vercel/blob/client";
+async function uploadFileToServer(file: File | Blob, filename: string): Promise<{ url: string; pathname: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('filename', filename);
+
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.error || 'Failed to upload file to storage');
+    }
+
+    return result;
+}
 
 const UploadForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,8 +64,6 @@ const UploadForm = () => {
 
         setIsSubmitting(true);
 
-        // PostHog -> Track Book Uploads...
-
         try {
             console.log("Step 1: Checking if book exists...");
             const existsCheck = await checkBookExists(data.title);
@@ -73,12 +87,8 @@ const UploadForm = () => {
                 return;
             }
 
-            console.log("Step 3: Uploading PDF to Vercel Blob...");
-            const uploadedPdfBlob = await upload(fileTitle, pdfFile, {
-                access: 'public',
-                handleUploadUrl: '/api/upload',
-                contentType: 'application/pdf'
-            });
+            console.log("Step 3: Uploading PDF to Storage...");
+            const uploadedPdfBlob = await uploadFileToServer(pdfFile, `${fileTitle}.pdf`);
             console.log("PDF uploaded:", uploadedPdfBlob.url);
 
             let coverUrl: string;
@@ -86,22 +96,14 @@ const UploadForm = () => {
             if(data.coverImage) {
                 console.log("Uploading custom cover...");
                 const coverFile = data.coverImage;
-                const uploadedCoverBlob = await upload(`${fileTitle}_cover.png`, coverFile, {
-                    access: 'public',
-                    handleUploadUrl: '/api/upload',
-                    contentType: coverFile.type
-                });
+                const uploadedCoverBlob = await uploadFileToServer(coverFile, `${fileTitle}_cover.png`);
                 coverUrl = uploadedCoverBlob.url;
             } else {
                 console.log("Uploading auto-generated cover...");
-                const response = await fetch(parsedPDF.cover)
+                const response = await fetch(parsedPDF.cover);
                 const blob = await response.blob();
 
-                const uploadedCoverBlob = await upload(`${fileTitle}_cover.png`, blob, {
-                    access: 'public',
-                    handleUploadUrl: '/api/upload',
-                    contentType: 'image/png'
-                });
+                const uploadedCoverBlob = await uploadFileToServer(blob, `${fileTitle}_cover.png`);
                 coverUrl = uploadedCoverBlob.url;
             }
 
@@ -145,8 +147,8 @@ const UploadForm = () => {
             router.push('/');
         } catch (error) {
             console.error(error);
-
-            toast.error("Failed to upload book. Please try again later.");
+            const msg = error instanceof Error ? error.message : "Failed to upload book. Please try again later.";
+            toast.error(msg);
         } finally {
             setIsSubmitting(false);
         }
