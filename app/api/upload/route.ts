@@ -37,6 +37,8 @@ export async function POST(request: Request): Promise<NextResponse> {
             const blob = await put(filename, file, {
                 access: "public",
                 token,
+                addRandomSuffix: true,
+                allowOverwrite: true,
             });
 
             return NextResponse.json(blob);
