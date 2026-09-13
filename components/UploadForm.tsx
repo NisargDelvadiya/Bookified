@@ -17,6 +17,7 @@ import { useAuth } from "@clerk/nextjs";
 import { toast } from 'sonner';
 import {checkBookExists, createBook, saveBookSegments} from "@/lib/actions/book.actions";
 import {useRouter} from "next/navigation";
+import {parsePDFFile} from "@/lib/utils";
 async function uploadFileToServer(file: File | Blob, filename: string): Promise<{ url: string; pathname: string }> {
     const formData = new FormData();
     formData.append('file', file);
