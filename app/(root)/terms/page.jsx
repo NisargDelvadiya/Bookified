@@ -1,6 +1,7 @@
 import React from 'react';
 import { Shield, Scale } from 'lucide-react';
 import BackToHomeButton from '@/components/BackToHomeButton';
+import GrievanceOfficerCard from '@/components/GrievanceOfficerCard';
 
 export const metadata = {
     title: 'Terms and Conditions | Bookified',
@@ -96,7 +97,7 @@ export default function TermsPage() {
                 </section>
 
                 {/* Grievance Redressal Mechanism */}
-                <section className="mt-8 p-6 rounded-xl bg-[#fbf9f5] border border-[#e6decb] space-y-3">
+                <section className="mt-8 p-6 rounded-xl bg-[#fbf9f5] border border-[#e6decb] space-y-4">
                     <div className="flex items-center gap-2">
                         <Shield className="w-6 h-6 text-[#663820]" />
                         <h2 className="text-lg font-bold text-[#212a3b]">
@@ -104,14 +105,14 @@ export default function TermsPage() {
                         </h2>
                     </div>
                     <p className="text-sm text-[#555]">
-                        In accordance with the Information Technology Act, 2000 and the Rules made thereunder, the designated Grievance Officer for Bookified is:
+                        In accordance with the Information Technology Act, 2000 and the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, the designated Grievance Officer for Bookified is:
                     </p>
-                    <div className="text-sm space-y-1 bg-white p-4 rounded-lg border border-[#e6decb]">
-                        <p><strong>Grievance Officer:</strong> Nisarg Jayesh Delvadiya</p>
-                        <p><strong>Email:</strong> <a href="mailto:nisarg.delvadiya1@zohomail.in" className="text-[#663820] underline">nisarg.delvadiya1@zohomail.in</a></p>
-                        <p><strong>Address:</strong> Vadodara, Gujarat, Bharat</p>
-                        <p className="text-xs text-[#777] mt-2">Any grievances will be acknowledged within 24 hours and disposed of within 15 days as mandated by Indian law.</p>
-                    </div>
+                    
+                    <GrievanceOfficerCard className="mt-2 max-w-full sm:max-w-lg" />
+
+                    <p className="text-xs text-[#777] mt-3">
+                        As mandated by Indian law, all grievances will be acknowledged within 24 hours of receipt and disposed of within 15 days.
+                    </p>
                 </section>
             </div>
         </main>

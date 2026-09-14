@@ -50,11 +50,20 @@ const FileUploader = ({
             <FormLabel className="form-label">{label}</FormLabel>
             <FormControl>
                 <div
+                    role="button"
+                    tabIndex={disabled ? -1 : 0}
+                    aria-label={`${label}: ${placeholder}`}
                     className={cn(
-                        'upload-dropzone border-2 border-dashed border-[#8B7355]/20',
+                        'upload-dropzone border-2 border-dashed border-[#8B7355]/20 focus-visible:ring-2 focus-visible:ring-[#212a3b] focus-visible:outline-none',
                         isUploaded && 'upload-dropzone-uploaded'
                     )}
                     onClick={() => !disabled && inputRef.current?.click()}
+                    onKeyDown={(e) => {
+                        if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+                            e.preventDefault();
+                            inputRef.current?.click();
+                        }
+                    }}
                 >
                     <input
                         type="file"
@@ -63,6 +72,7 @@ const FileUploader = ({
                         ref={inputRef}
                         onChange={handleFileChange}
                         disabled={disabled}
+                        aria-hidden="true"
                     />
 
                     {isUploaded ? (
@@ -71,9 +81,10 @@ const FileUploader = ({
                             <button
                                 type="button"
                                 onClick={onRemove}
-                                className="upload-dropzone-remove mt-2"
+                                aria-label={`Remove uploaded file ${value?.name || ''}`}
+                                className="upload-dropzone-remove mt-2 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="w-5 h-5" aria-hidden="true" />
                             </button>
                         </div>
                     ) : (

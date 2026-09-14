@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Lock } from 'lucide-react';
 import BackToHomeButton from '@/components/BackToHomeButton';
+import GrievanceOfficerCard from '@/components/GrievanceOfficerCard';
 
 export const metadata = {
     title: 'Privacy Policy | Bookified',
@@ -92,7 +93,7 @@ export default function PrivacyPage() {
                 </section>
 
                 {/* Grievance Officer & Contact */}
-                <section className="mt-8 p-6 rounded-xl bg-[#fbf9f5] border border-[#e6decb] space-y-3">
+                <section className="mt-8 p-6 rounded-xl bg-[#fbf9f5] border border-[#e6decb] space-y-4">
                     <div className="flex items-center gap-2">
                         <Lock className="w-6 h-6 text-[#663820]" />
                         <h2 className="text-lg font-bold text-[#212a3b]">
@@ -100,14 +101,14 @@ export default function PrivacyPage() {
                         </h2>
                     </div>
                     <p className="text-sm text-[#555]">
-                        If you have any questions, wish to exercise your data principal rights, or have a grievance regarding your privacy, please contact our designated officer:
+                        If you have any questions, wish to exercise your data principal rights under the DPDP Act 2023, or have a grievance regarding your privacy, please contact our designated officer:
                     </p>
-                    <div className="text-sm space-y-1 bg-white p-4 rounded-lg border border-[#e6decb]">
-                        <p><strong>Name:</strong> Nisarg Jayesh Delvadiya</p>
-                        <p><strong>Designation:</strong> Grievance & Data Privacy Officer</p>
-                        <p><strong>Email:</strong> <a href="mailto:nisarg.delvadiya1@zohomail.in" className="text-[#663820] underline">nisarg.delvadiya1@zohomail.in</a></p>
-                        <p><strong>Jurisdiction:</strong> Vadodara, Gujarat, Bharat</p>
-                    </div>
+
+                    <GrievanceOfficerCard className="mt-2 max-w-full sm:max-w-lg" />
+
+                    <p className="text-xs text-[#777] mt-3">
+                        Grievances will be addressed promptly in accordance with the statutory response timelines mandated under Indian data protection law.
+                    </p>
                 </section>
             </div>
         </main>

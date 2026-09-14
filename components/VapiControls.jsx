@@ -77,12 +77,14 @@ const VapiControls = ({ book }) => {
                         <button
                             onClick={isActive ? stop : start}
                             disabled={status === 'connecting'}
-                            className={`vapi-mic-btn shadow-md !w-[60px] !h-[60px] z-10 ${isActive ? 'vapi-mic-btn-active' : 'vapi-mic-btn-inactive'}`}
+                            aria-label={isActive ? "End voice conversation" : "Start voice conversation with book"}
+                            aria-pressed={isActive}
+                            className={`vapi-mic-btn shadow-md !w-[60px] !h-[60px] z-10 focus-visible:ring-4 focus-visible:ring-[#212a3b]/30 focus-visible:outline-none ${isActive ? 'vapi-mic-btn-active' : 'vapi-mic-btn-inactive'}`}
                         >
                             {isActive ? (
-                                <Mic className="size-7 text-white" />
+                                <Mic className="size-7 text-white" aria-hidden="true" />
                             ) : (
-                                <MicOff className="size-7 text-[#212a3b]" />
+                                <MicOff className="size-7 text-[#212a3b]" aria-hidden="true" />
                             )}
                         </button>
                     </div>
@@ -96,9 +98,9 @@ const VapiControls = ({ book }) => {
                         <p className="text-[#3d485e] font-medium">by {book?.author}</p>
                     </div>
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-3" role="status" aria-live="polite">
                         <div className="vapi-status-indicator">
-                            <span className={`vapi-status-dot ${statusDisplay.color}`} />
+                            <span className={`vapi-status-dot ${statusDisplay.color}`} aria-hidden="true" />
                             <span className="vapi-status-text">{statusDisplay.label}</span>
                         </div>
 

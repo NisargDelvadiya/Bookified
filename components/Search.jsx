@@ -37,7 +37,8 @@ const Search = () => {
                 />
             </div>
             <Input
-                type="text"
+                type="search"
+                aria-label="Search books by title or author"
                 placeholder="Search books by title or author"
                 className="library-search-input border-none shadow-none focus-visible:ring-0"
                 value={query}

@@ -42,18 +42,24 @@ const Navbar = () => {
 
     return (
         <header
+            role="banner"
+            aria-label="Site Header"
             className={cn(
                 "w-full fixed top-0 left-0 right-0 z-50 bg-(--bg-primary) transition-transform duration-300 ease-in-out",
                 isVisible ? "translate-y-0" : "-translate-y-full"
             )}
         >
             <div className="wrapper navbar-height py-4 flex justify-between items-center">
-                <Link href="https://bookified-now.vercel.app" className="flex gap-0.5 items-center">
-                    <Image src="/assets/logo.png" alt="Bookified" width={42} height={26} />
+                <Link
+                    href="https://bookified-now.vercel.app"
+                    className="flex gap-0.5 items-center focus-visible:ring-2 focus-visible:ring-[#212a3b] focus-visible:outline-none focus-visible:rounded-lg"
+                    aria-label="Bookified Home"
+                >
+                    <Image src="/assets/logo.png" alt="Bookified logo" width={42} height={26} />
                     <span className="logo-text">Bookified</span>
                 </Link>
 
-                <nav className="w-fit flex gap-7.5 items-center">
+                <nav className="w-fit flex gap-7.5 items-center" aria-label="Main Navigation">
                     {navItems.map(({ label, href }) => {
                         const isActive = pathName === href || (href !== '/' && pathName.startsWith(href));
 

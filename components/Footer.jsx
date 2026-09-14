@@ -4,7 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import GoogleTranslate from './GoogleTranslate';
-import { Heart, ExternalLink, ShieldCheck, Mail, MapPin, User } from 'lucide-react';
+import GrievanceOfficerCard from './GrievanceOfficerCard';
+import { Heart, ExternalLink } from 'lucide-react';
 
 const donationCauses = [
     {
@@ -36,7 +37,11 @@ const donationCauses = [
 
 const Footer = () => {
     return (
-        <footer className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800">
+        <footer
+            role="contentinfo"
+            aria-label="Site Footer"
+            className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800"
+        >
             <div className="wrapper py-14">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* 1. Brand & Mission */}
@@ -111,29 +116,12 @@ const Footer = () => {
                         </ul>
 
                         {/* Grievance Officer Card */}
-                        <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-xs space-y-1.5 mt-3">
-                            <div className="flex items-center gap-1.5 font-semibold text-gray-200">
-                                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                                <span>Grievance Officer (IT Rules, 2021)</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-gray-400">
-                                <User className="w-3 h-3 text-gray-400" />
-                                <span>Nisarg Jayesh Delvadiya</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-gray-400">
-                                <Mail className="w-3 h-3 text-gray-400" />
-                                <a href="mailto:nisarg.delvadiya1@zohomail.in" className="hover:text-white underline">
-                                    nisarg.delvadiya1@zohomail.in
-                                </a>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-gray-400">
-                                <MapPin className="w-3 h-3 text-gray-400" />
-                                <span>Vadodara, Gujarat, Bharat</span>
-                            </div>
+                        <div className="mt-4">
+                            <GrievanceOfficerCard />
                         </div>
                     </div>
 
-                    {/* 4. Language Selector & Quick Nav */}
+                    {/* 4. Language Selector */}
                     <div className="space-y-4">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Select Language
@@ -142,17 +130,6 @@ const Footer = () => {
                             Translate Bookified into official Indian regional languages:
                         </p>
                         <GoogleTranslate />
-
-                        <div className="pt-4 border-t border-white/10 text-xs text-gray-400 space-y-1">
-                            <p className="font-medium text-gray-300">Fast Navigation</p>
-                            <div className="flex flex-wrap gap-2 pt-1">
-                                <Link href="/" className="hover:text-white">Library</Link>
-                                <span>•</span>
-                                <Link href="/books/new" className="hover:text-white">Upload</Link>
-                                <span>•</span>
-                                <Link href="/subscriptions" className="hover:text-white">Pricing</Link>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

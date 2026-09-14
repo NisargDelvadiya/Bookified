@@ -34,7 +34,13 @@ const Transcript = ({ messages = [], currentMessage = '', currentUserMessage = '
   }
 
   return (
-    <div ref={scrollRef} className="transcript-messages overflow-y-auto pr-2 flex-1">
+    <div
+      ref={scrollRef}
+      role="log"
+      aria-label="Conversation transcript"
+      aria-live="polite"
+      className="transcript-messages overflow-y-auto pr-2 flex-1"
+    >
       {messages.map((message, index) => (
         <div
           key={index}

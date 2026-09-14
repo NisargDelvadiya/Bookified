@@ -98,30 +98,38 @@ const GoogleTranslate = () => {
             <button
                 type="button"
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/80 dark:bg-[#1a2332] border border-gray-200 dark:border-gray-700 text-sm font-medium text-[#212a3b] dark:text-gray-200 hover:bg-white transition-all shadow-xs"
+                aria-haspopup="listbox"
                 aria-expanded={isOpen}
+                aria-label={`Select website language. Current language: ${activeLabel}`}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/80 dark:bg-[#1a2332] border border-gray-200 dark:border-gray-700 text-sm font-medium text-[#212a3b] dark:text-gray-200 hover:bg-white focus-visible:ring-2 focus-visible:ring-[#212a3b] focus-visible:outline-none transition-all shadow-xs"
             >
-                <Globe className="w-4 h-4 text-[#212a3b] dark:text-gray-300" />
+                <Globe className="w-4 h-4 text-[#212a3b] dark:text-gray-300" aria-hidden="true" />
                 <span>{activeLabel}</span>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
             </button>
 
             {isOpen && (
-                <div className="absolute bottom-full mb-2 left-0 sm:left-auto sm:right-0 w-56 max-h-72 overflow-y-auto rounded-2xl bg-[#1e232d] text-white shadow-2xl ring-1 ring-black/5 z-50 p-1.5 focus:outline-none scrollbar-thin">
+                <div
+                    role="listbox"
+                    aria-label="Available languages"
+                    className="absolute bottom-full mb-2 left-0 sm:left-auto sm:right-0 w-56 max-h-72 overflow-y-auto rounded-2xl bg-[#1e232d] text-white shadow-2xl ring-1 ring-black/5 z-50 p-1.5 focus:outline-none scrollbar-thin"
+                >
                     {INDIAN_LANGUAGES.map((lang) => {
                         const isSelected = selectedLanguage === lang.code;
                         return (
                             <button
                                 key={lang.code}
+                                role="option"
+                                aria-selected={isSelected}
                                 onClick={() => changeLanguage(lang.code)}
-                                className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-xl text-left transition-colors ${
+                                className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-xl text-left transition-colors focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none ${
                                     isSelected
                                         ? 'bg-white/10 text-white font-semibold'
                                         : 'text-gray-300 hover:bg-white/5 hover:text-white'
                                 }`}
                             >
                                 <span className="flex items-center gap-2">
-                                    {isSelected ? <Check className="w-4 h-4 text-white" /> : <span className="w-4" />}
+                                    {isSelected ? <Check className="w-4 h-4 text-white" aria-hidden="true" /> : <span className="w-4" />}
                                     {lang.label}
                                 </span>
                             </button>

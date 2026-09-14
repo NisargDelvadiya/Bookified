@@ -1,8 +1,7 @@
 import { IBM_Plex_Serif, Mona_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import AppLayoutShell from "@/components/AppLayoutShell";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -103,13 +102,15 @@ export default function RootLayout({ children }) {
           <body
             className={`${ibmPlexSerif.variable} ${monaSans.variable} relative min-h-screen flex flex-col justify-between font-sans antialiased`}
           >
-            <div>
-              <Navbar />
-              <div className="pt-[var(--navbar-height)]">
-                {children}
-              </div>
-            </div>
-            <Footer />
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#212a3b] focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none"
+            >
+              Skip to main content
+            </a>
+            <AppLayoutShell>
+              {children}
+            </AppLayoutShell>
             <Toaster />
           </body>
         </html>
