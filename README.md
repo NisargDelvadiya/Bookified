@@ -1,7 +1,11 @@
 # 📖 Bookified — Turn Any Book into an Interactive AI Voice Conversation
 
 <div align="center">
-  <img src="public/assets/logo.png" alt="Bookified Logo" width="80" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/assets/logo-white-hd.png">
+    <source media="(prefers-color-scheme: light)" srcset="public/assets/logo-hd.png">
+    <img src="public/assets/logo-hd.png" alt="Bookified Logo" width="86" />
+  </picture>
   <h3>Don't just read books — talk with them.</h3>
   <p>An intelligent web application that transforms standard PDF books into living, interactive AI reading companions with real-time voice synthesis and instant conversational insights.</p>
 
@@ -144,6 +148,7 @@ Bookified/
 In accordance with the **Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021** and the **Digital Personal Data Protection Act, 2023**:
 
 - **Grievance & Data Protection Officer**: Nisarg Jayesh Delvadiya
+- **Website**: [www.nisargjayeshdelvadiya.com](https://www.nisargjayeshdelvadiya.com)
 - **Email**: [nisarg.delvadiya1@zohomail.in](mailto:nisarg.delvadiya1@zohomail.in)
 - **Location**: Vadodara, Gujarat, Bharat
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, User, Mail, MapPin } from 'lucide-react';
+import { ShieldCheck, User, Mail, MapPin, Globe, ExternalLink } from 'lucide-react';
 
 export default function GrievanceOfficerCard({ className = '' }) {
     return (
@@ -12,6 +12,18 @@ export default function GrievanceOfficerCard({ className = '' }) {
                 <div className="flex items-center gap-2.5">
                     <User className="w-4 h-4 text-gray-400 shrink-0" />
                     <span className="text-gray-200">Nisarg Jayesh Delvadiya</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                    <Globe className="w-4 h-4 text-gray-400 shrink-0" />
+                    <a
+                        href="https://www.nisargjayeshdelvadiya.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-1.5 text-gray-200 hover:text-white underline underline-offset-2 transition-colors"
+                    >
+                        <span>www.nisargjayeshdelvadiya.com</span>
+                        <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
+                    </a>
                 </div>
                 <div className="flex items-center gap-2.5">
                     <Mail className="w-4 h-4 text-gray-400 shrink-0" />

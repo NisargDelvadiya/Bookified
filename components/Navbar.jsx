@@ -55,7 +55,7 @@ const Navbar = () => {
                     className="flex gap-0.5 items-center focus-visible:ring-2 focus-visible:ring-[#212a3b] focus-visible:outline-none focus-visible:rounded-lg"
                     aria-label="Bookified Home"
                 >
-                    <Image src="/assets/logo.png" alt="Bookified logo" width={42} height={26} />
+                    <Image src="/assets/logo-hd.png" alt="Bookified logo" width={42} height={26} />
                     <span className="logo-text">Bookified</span>
                 </Link>
 

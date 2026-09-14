@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import GoogleTranslate from './GoogleTranslate';
+import ZohoFeedbackModal from './ZohoFeedbackModal';
 import { Heart, ExternalLink } from 'lucide-react';
 
 const donationCauses = [
@@ -42,17 +43,16 @@ const Footer = () => {
             className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800"
         >
             <div className="wrapper py-14">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* 1. Brand & Mission */}
-                    <div className="space-y-4 max-w-md">
+                    <div className="space-y-4 max-w-sm">
                         <Link href="https://bookified-now.vercel.app" className="flex gap-2.5 items-center" aria-label="Bookified Home">
                             <Image
-                                src="/assets/logo.png"
+                                src="/assets/logo-white-hd.png"
                                 alt="Bookified Logo"
                                 width={46}
                                 height={29}
-                                className="object-contain brightness-0 invert"
-                                style={{ filter: 'brightness(0) invert(1)' }}
+                                className="object-contain"
                             />
                             <span className="font-serif font-bold text-3xl text-white tracking-wide">Bookified</span>
                         </Link>
@@ -62,28 +62,28 @@ const Footer = () => {
                     </div>
 
                     {/* 2. Legal & Indian Compliance */}
-                    <div className="space-y-4 md:text-right flex flex-col items-start md:items-end md:justify-self-end">
+                    <div className="space-y-4">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Legal & Compliance
                         </h4>
-                        <ul className="space-y-2.5 text-sm flex flex-col items-start md:items-end">
-                            <li className="flex justify-start md:justify-end">
+                        <ul className="space-y-2.5 text-sm flex flex-col">
+                            <li>
                                 <Link
                                     href="/terms"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group inline-flex items-center justify-start md:justify-end gap-1.5 hover:text-white hover:underline underline-offset-4 transition-colors"
+                                    className="group inline-flex items-center gap-1.5 hover:text-white hover:underline underline-offset-4 transition-colors"
                                 >
                                     <span>Terms & Conditions</span>
                                     <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
                                 </Link>
                             </li>
-                            <li className="flex justify-start md:justify-end">
+                            <li>
                                 <Link
                                     href="/privacy"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group inline-flex items-center justify-start md:justify-end gap-1.5 hover:text-white hover:underline underline-offset-4 transition-colors"
+                                    className="group inline-flex items-center gap-1.5 hover:text-white hover:underline underline-offset-4 transition-colors"
                                 >
                                     <span>Privacy Policy (DPDP 2023)</span>
                                     <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
@@ -92,19 +92,27 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* 3. Supported Causes & Donations */}
-                    <div className="space-y-4 md:text-right flex flex-col items-start md:items-end md:justify-self-end">
+                    {/* 3. Feedback & Community */}
+                    <div className="space-y-4">
+                        <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
+                            Feedback & Support
+                        </h4>
+                        <ZohoFeedbackModal />
+                    </div>
+
+                    {/* 4. Supported Causes & Donations */}
+                    <div className="space-y-4">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Supported Causes & Donations
                         </h4>
-                        <ul className="space-y-2.5 flex flex-col items-start md:items-end">
+                        <ul className="space-y-2.5 flex flex-col">
                             {donationCauses.map((cause) => (
-                                <li key={cause.name} className="flex justify-start md:justify-end">
+                                <li key={cause.name}>
                                     <a
                                         href={cause.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center justify-start md:justify-end gap-1.5 text-sm text-gray-300 hover:text-white transition-colors"
+                                        className="group inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors"
                                     >
                                         <span className="group-hover:underline underline-offset-4">{cause.name}</span>
                                         <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
