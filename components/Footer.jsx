@@ -122,7 +122,14 @@ const Footer = () => {
                 <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col items-center gap-4 text-center text-xs text-gray-400">
                     <GoogleTranslate />
                     <p>
-                        © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 | Bookified™ • All Rights Reserved
+                        © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 |{' '}
+                        <Link
+                            href="https://bookified-now.vercel.app"
+                            className="hover:text-white hover:underline underline-offset-2 transition-colors font-normal text-gray-300"
+                        >
+                            Bookified™
+                        </Link>{' '}
+                        • All Rights Reserved
                     </p>
                 </div>
             </div>
