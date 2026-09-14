@@ -97,9 +97,6 @@ const Footer = () => {
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Supported Causes & Donations
                         </h4>
-                        <p className="text-xs text-gray-400">
-                            Support verified Indian charitable and educational initiatives:
-                        </p>
                         <ul className="space-y-2.5 flex flex-col items-start md:items-end">
                             {donationCauses.map((cause) => (
                                 <li key={cause.name} className="flex justify-start md:justify-end">
