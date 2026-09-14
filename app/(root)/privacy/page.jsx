@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
-import { ArrowLeft, ShieldCheck, Lock, Eye, Database } from 'lucide-react';
+import { ShieldCheck, Lock } from 'lucide-react';
+import BackToHomeButton from '@/components/BackToHomeButton';
 
 export const metadata = {
     title: 'Privacy Policy | Bookified',
@@ -11,9 +11,9 @@ export default function PrivacyPage() {
     return (
         <main className="wrapper py-12 max-w-4xl mx-auto text-[#212a3b]">
             <div className="mb-8">
-                <Link href="/" className="inline-flex items-center gap-2 text-sm text-[#663820] hover:underline font-medium mb-4">
-                    <ArrowLeft className="w-4 h-4" /> Back to Library
-                </Link>
+                <div className="mb-4">
+                    <BackToHomeButton />
+                </div>
                 <div className="flex items-center gap-3 mb-2">
                     <ShieldCheck className="w-8 h-8 text-[#663820]" />
                     <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#212a3b]">Privacy Policy</h1>

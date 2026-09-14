@@ -87,13 +87,25 @@ const Footer = () => {
                         </h4>
                         <ul className="space-y-2.5 text-sm">
                             <li>
-                                <Link href="/terms" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                                    Terms & Conditions
+                                <Link
+                                    href="/terms"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group inline-flex items-center gap-1.5 hover:text-white hover:underline underline-offset-4 transition-colors"
+                                >
+                                    <span>Terms & Conditions</span>
+                                    <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/privacy" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                                    Privacy Policy (DPDP 2023)
+                                <Link
+                                    href="/privacy"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group inline-flex items-center gap-1.5 hover:text-white hover:underline underline-offset-4 transition-colors"
+                                >
+                                    <span>Privacy Policy (DPDP 2023)</span>
+                                    <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
                                 </Link>
                             </li>
                             <li>
