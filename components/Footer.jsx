@@ -44,19 +44,19 @@ const Footer = () => {
             <div className="wrapper py-14">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                     {/* 1. Brand & Mission */}
-                    <div className="space-y-4 max-w-sm">
-                        <Link href="https://bookified-now.vercel.app" className="flex gap-2 items-center" aria-label="Bookified Home">
+                    <div className="space-y-4 max-w-md">
+                        <Link href="https://bookified-now.vercel.app" className="flex gap-2.5 items-center" aria-label="Bookified Home">
                             <Image
                                 src="/assets/logo.png"
                                 alt="Bookified Logo"
-                                width={38}
-                                height={24}
+                                width={46}
+                                height={29}
                                 className="object-contain brightness-0 invert"
                                 style={{ filter: 'brightness(0) invert(1)' }}
                             />
-                            <span className="font-serif font-bold text-2xl text-white tracking-wide">Bookified</span>
+                            <span className="font-serif font-bold text-3xl text-white tracking-wide">Bookified</span>
                         </Link>
-                        <p className="text-sm text-gray-400 leading-relaxed">
+                        <p className="text-[15px] sm:text-base text-gray-300/90 leading-relaxed">
                             Empowering knowledge seekers through AI-powered conversational reading. Turn your books into live, interactive voice sessions.
                         </p>
                     </div>
