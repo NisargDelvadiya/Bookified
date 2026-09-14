@@ -198,7 +198,7 @@ const UploadForm = () => {
                                     <FormControl>
                                         <Input
                                             className="form-input"
-                                            placeholder="ex: Rich Dad Poor Dad"
+                                            placeholder="ex: India that is Bharat"
                                             {...field}
                                             disabled={isSubmitting}
                                         />
@@ -218,7 +218,7 @@ const UploadForm = () => {
                                     <FormControl>
                                         <Input
                                             className="form-input"
-                                            placeholder="ex: Robert Kiyosaki"
+                                            placeholder="ex: J. Sai Deepak"
                                             {...field}
                                             disabled={isSubmitting}
                                         />
