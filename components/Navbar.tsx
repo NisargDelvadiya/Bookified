@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname} from "next/navigation";
@@ -15,9 +16,37 @@ const navItems = [
 const Navbar = () => {
     const pathName = usePathname();
     const { user } = useUser();
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY < 20) {
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
+                // Scrolling down -> hide
+                setIsVisible(false);
+            } else if (currentScrollY < lastScrollY) {
+                // Scrolling up -> show
+                setIsVisible(true);
+            }
+
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [lastScrollY]);
 
     return (
-        <header className="w-full fixed z-50 bg-(--bg-primary)">
+        <header
+            className={cn(
+                "w-full fixed top-0 left-0 right-0 z-50 bg-(--bg-primary) transition-transform duration-300 ease-in-out",
+                isVisible ? "translate-y-0" : "-translate-y-full"
+            )}
+        >
             <div className="wrapper navbar-height py-4 flex justify-between items-center">
                 <Link href="/" className="flex gap-0.5 items-center">
                     <Image src="/assets/logo.png" alt="Bookfied" width={42} height={26} />
