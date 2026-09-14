@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useClerk } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
 const Navbar = () => {
     const pathName = usePathname();
     const { user } = useUser();
+    const { openUserProfile } = useClerk();
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -78,9 +79,14 @@ const Navbar = () => {
                             <div className="nav-user-link">
                                 <UserButton />
                                 {(user?.firstName || user?.lastName) && (
-                                    <Link href="/subscriptions" className="nav-user-name">
+                                    <button
+                                        type="button"
+                                        onClick={() => openUserProfile()}
+                                        className="nav-user-name cursor-pointer bg-transparent border-0 p-0 text-left font-inherit hover:opacity-80 transition-opacity"
+                                        aria-label="Open Account Profile"
+                                    >
                                         {user.fullName || [user.firstName, user.lastName].filter(Boolean).join(" ")}
-                                    </Link>
+                                    </button>
                                 )}
                             </div>
                         </SignedIn>
