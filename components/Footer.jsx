@@ -44,9 +44,16 @@ const Footer = () => {
             <div className="wrapper py-14">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                     {/* 1. Brand & Mission */}
-                    <div className="space-y-4">
-                        <Link href="https://bookified-now.vercel.app" className="flex gap-2 items-center">
-                            <Image src="/assets/logo.png" alt="Bookified Logo" width={38} height={24} className="brightness-110" />
+                    <div className="space-y-4 max-w-sm">
+                        <Link href="https://bookified-now.vercel.app" className="flex gap-2 items-center" aria-label="Bookified Home">
+                            <Image
+                                src="/assets/logo.png"
+                                alt="Bookified Logo"
+                                width={38}
+                                height={24}
+                                className="object-contain brightness-0 invert"
+                                style={{ filter: 'brightness(0) invert(1)' }}
+                            />
                             <span className="font-serif font-bold text-2xl text-white tracking-wide">Bookified</span>
                         </Link>
                         <p className="text-sm text-gray-400 leading-relaxed">
@@ -55,7 +62,7 @@ const Footer = () => {
                     </div>
 
                     {/* 2. Supported Causes & Donations */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 md:justify-self-center max-w-sm w-full">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Supported Causes & Donations
                         </h4>
@@ -80,11 +87,11 @@ const Footer = () => {
                     </div>
 
                     {/* 3. Legal & Indian Compliance */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 md:justify-self-end md:text-right flex flex-col md:items-end">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Legal & Compliance
                         </h4>
-                        <ul className="space-y-2.5 text-sm">
+                        <ul className="space-y-2.5 text-sm flex flex-col md:items-end">
                             <li>
                                 <Link
                                     href="/terms"
