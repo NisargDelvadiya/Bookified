@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import CookieConsent from '@/components/CookieConsent';
 
 export default function AppLayoutShell({ children }) {
     const pathname = usePathname();
@@ -13,6 +14,7 @@ export default function AppLayoutShell({ children }) {
         return (
             <div id="main-content" tabIndex={-1} className="min-h-screen bg-[var(--bg-primary)] outline-none py-6 sm:py-10">
                 {children}
+                <CookieConsent />
             </div>
         );
     }
@@ -26,6 +28,7 @@ export default function AppLayoutShell({ children }) {
                 </div>
             </div>
             <Footer />
+            <CookieConsent />
         </>
     );
 }
