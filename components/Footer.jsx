@@ -159,7 +159,7 @@ const Footer = () => {
                 {/* Bottom Copyright Bar */}
                 <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 text-center sm:text-left">
                     <p>
-                        © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 | <span className="font-semibold text-gray-200">Bookified™</span> • All Rights Reserved
+                        © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 | Bookified™ • All Rights Reserved
                     </p>
                     <p className="text-gray-500 text-[11px]">
                         Compliant with Information Technology Act, 2000 & DPDP Act, 2023
