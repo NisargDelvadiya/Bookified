@@ -1,175 +1,164 @@
+# 📖 Bookified — Turn Any Book into an Interactive AI Voice Conversation
+
 <div align="center">
-  <br />
-    <a href="https://youtu.be/NiwawEe92Co" target="_blank">
-      <img src="public/readme/readme-hero-new.webp" alt="Project Banner">
-    </a>
-  <br />
+  <img src="public/assets/logo.png" alt="Bookified Logo" width="80" />
+  <h3>Don't just read books — talk with them.</h3>
+  <p>An intelligent web application that transforms standard PDF books into living, interactive AI reading companions with real-time voice synthesis and instant conversational insights.</p>
 
-  <div>
-<img src="https://img.shields.io/badge/-Next.js_16-000000?style=for-the-badge&logo=Next.js&logoColor=white" />
-<img src="https://img.shields.io/badge/-ElevenLabs-FFFFFF?style=for-the-badge&logo=ElevenLabs&logoColor=black" />
-<img src="https://img.shields.io/badge/-Vapi-62F6B5?style=for-the-badge&logo=Vapi&logoColor=black" />
-<img src="https://img.shields.io/badge/-Clerk-6C47FF?style=for-the-badge&logo=Clerk&logoColor=white" /><br/>
-<img src="https://img.shields.io/badge/-MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white" />
-<img src="https://img.shields.io/badge/-Typescript-3178C6?style=for-the-badge&logo=Typescript&logoColor=white" />
-<img src="https://img.shields.io/badge/-Tailwind-06B6D4?style=for-the-badge&logo=Tailwind-CSS&logoColor=white" />
-<img src="https://img.shields.io/badge/-Shadcn/UI-000000?style=for-the-badge&logo=shadcnui&logoColor=white" />
-
-  </div>
-
-  <h3 align="center">AI Book Companion | Vapi, ElevenLabs</h3>
-
-   <div align="center">
-     Build this project step by step with our detailed tutorial on <a href="https://www.youtube.com/watch?v=XUkNR-JfHwo" target="_blank"><b>JavaScript Mastery</b></a> YouTube. Join the JSM family!
-    </div>
+  <p>
+    <b>Made with ❤️ in Bharat 🇮🇳 | Bookified™</b>
+  </p>
 </div>
 
-## 📋 <a name="table">Table of Contents</a>
+---
 
-1. ✨ [Introduction](#introduction)
-2. ⚙️ [Tech Stack](#tech-stack)
-3. 🔋 [Features](#features)
-4. 🤸 [Quick Start](#quick-start)
-5. 🔗 [Assets](#links)
-6. 🚀 [More](#more)
+## 🌟 Features
 
-## 🚨 Tutorial
+- 🎙️ **Real-Time AI Voice Conversations**: Speak directly to your books using low-latency, natural synthetic voices powered by [Vapi AI](https://vapi.ai) and [ElevenLabs](https://elevenlabs.io).
+- 📚 **Automated PDF Parsing & Smart Segmentation**: Upload any readable PDF (up to 50MB) and automatically extract text segments and auto-generate book covers.
+- ⚡ **Lightning Fast Full-Text Search**: Instant search across your entire book library and chapter segments with MongoDB text indexing.
+- 🌐 **Multi-Language Support (20 Indian Languages)**: Seamlessly translate the interface into 20 regional Indian languages via custom Google Translate integration.
+- 💳 **Flexible Subscription Plans**: Built-in tiered access (Free, Standard, Pro) powered natively by Clerk User Billing.
+- ⚖️ **Indian Law Compliant**: Complete Terms & Conditions and Privacy Policy complying with the **Information Technology Act, 2000**, **SPDI Rules, 2011**, and **Digital Personal Data Protection (DPDP) Act, 2023**.
+- 🤝 **Support for Verified Causes**: Direct links to vetted Indian charitable and educational organizations including The Akshaya Patra Foundation, Hindu Fund, Veducation, Shiv Dhaam, and For The People.
+- 📱 **Modern, Responsive & Accessible UI**: Fluid layouts, floating auto-hiding navigation, and shimmer skeleton loading states.
 
-This repository contains the code corresponding to an in-depth tutorial available on our YouTube channel, <a href="https://www.youtube.com/@javascriptmastery/videos" target="_blank"><b>JavaScript Mastery</b></a>.
+---
 
-If you prefer visual learning, this is the perfect resource for you. Follow our tutorial to learn how to build projects like these step-by-step in a beginner-friendly manner!
+## 🛠️ Technology Stack
 
-<a href="https://youtu.be/NiwawEe92Co" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/1736fca5-a031-4854-8c09-bc110e3bc16d" /></a>
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
+- **Language**: JavaScript (ES2022 / JSX)
+- **Styling**: Tailwind CSS & Vanilla CSS
+- **Authentication & Billing**: [Clerk](https://clerk.com)
+- **Database & ODM**: [MongoDB Atlas](https://www.mongodb.com) & [Mongoose](https://mongoosejs.com)
+- **Voice AI Agent**: [Vapi AI](https://vapi.ai)
+- **Voice Synthesis**: [ElevenLabs](https://elevenlabs.io)
+- **PDF Engine**: [PDF.js](https://mozilla.github.io/pdf.js/)
+- **File Storage**: [Vercel Blob Storage](https://vercel.com/docs/storage/vercel-blob)
+- **Deployment**: [Vercel](https://vercel.com)
 
-## <a name="introduction">✨ Introduction</a>
+---
 
-Bookified is an AI-powered platform that lets you have real-time voice conversations with your books. Built with Next.js 16, Vapi, and MongoDB, it transforms PDFs into interactive entities using natural voice synthesis. Choose from custom ElevenLabs personas to chat with your library, request summaries, and view live transcripts—all wrapped in a sleek Shadcn UI with Clerk authentication. 
+## 🚀 Getting Started
 
-If you're getting started and need assistance or face any bugs, join our active Discord community with over **50k+** members. It's a place where people help each other out.
-
-<a href="https://discord.com/invite/n6EdbFJ" target="_blank"><img src="https://github.com/sujatagunale/EasyRead/assets/151519281/618f4872-1e10-42da-8213-1d69e486d02e" /></a>
-
-## <a name="tech-stack">⚙️ Tech Stack</a>
-
-- **[Clerk](https://jsm.dev/books-clerk)** is a comprehensive user management and authentication platform. It provides secure, pre-built components for email and social logins, enabling seamless session management and protected routes with minimal configuration.
-
-- **[CodeRabbit](https://jsm.dev/books-coderabbit)** is an AI-powered code review platform that provides contextual, line-by-line feedback on pull requests. It automates the review process by identifying bugs, suggesting optimizations, and ensuring coding standards are met, significantly reducing the manual effort for developers and improving code quality.
-
-- **[ElevenLabs](https://elevenlabs.io/docs)** is an advanced AI audio platform providing lifelike text-to-speech. It powers the voice previews in Bookified, allowing users to hear and select from a variety of natural-sounding AI personas before starting a conversation.
-
-- **[MongoDB](https://www.mongodb.com/docs/)** is a flexible, document-based NoSQL database designed for scalability and developer ease. Combined with Mongoose, it serves as the core storage for user libraries, book metadata, and conversation transcripts.
-
-- **[Next.js](https://nextjs.org/docs)** is a powerful React framework for building full-stack web applications. It handles the core application logic, server-side rendering, and API routes, enabling a fast and responsive interface for the Bookified platform.
-
-- **[Shadcn UI](https://ui.shadcn.com/)** is a collection of re-usable, accessible components built with Tailwind CSS and Radix UI. It allows for the creation of a clean, modular, and professional-grade user interface that is easy to customize and theme.
-
-- **[TypeScript](https://www.typescriptlang.org/)** is a superset of JavaScript that adds static typing, providing better tooling, code quality, and error detection. It ensures the application remains maintainable and robust as the codebase scales.
-
-- **[Vapi](https://jsm.dev/books-vapi)** is a specialized Voice AI platform that enables real-time, low-latency conversational audio. It serves as the primary engine for Bookified, allowing users to have seamless, back-and-forth verbal interactions with their uploaded content.
-
-## <a name="features">🔋 Features</a>
-
-👉 **PDF Upload & Ingestion**: Seamlessly upload PDF books with automated text extraction, intelligent chunking, and high-dimensional embeddings for precise context retrieval.
-
-👉 **Voice-First Conversations**: Engage in natural, real-time voice dialogues with your uploaded books, allowing you to ask questions or explore complex concepts verbally via Vapi.
-
-👉 **AI Voice Personas**: Choose from a variety of distinct AI personalities and hear instant high-fidelity previews powered by ElevenLabs to find the perfect reading companion.
-
-👉 **Smart Summaries & Insights**: Quickly extract the essence of any chapter or request deep-dive summaries, making long-form content more accessible and digestible.
-
-👉 **Session Transcripts**: Keep a complete record of every vocal interaction with auto-generated text transcripts, ensuring you never lose a key insight from your discussions.
-
-👉 **Library Management**: Effortlessly organize and search through your personal uploads or the global collection with a high-performance search interface.
-
-👉 **Auth & Subscription**: Secure user access via email and social login, paired with a robust billing system to manage premium features and platform subscriptions.
-
-And many more, including code architecture and reusability.
-
-## <a name="quick-start">🤸 Quick Start</a>
-
-Follow these steps to set up the project locally on your machine.
-
-**Prerequisites**
-
-Make sure you have the following installed on your machine:
-
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en)
-- [npm](https://www.npmjs.com/) (Node Package Manager)
-
-**Cloning the Repository**
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/adrianhajdin/jsm_bookified.git
-cd jsm_bookified
+git clone https://github.com/NisargDelvadiya/Bookified.git
+cd Bookified
 ```
 
-**Installation**
-
-Install the project dependencies using npm:
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-**Set Up Environment Variables**
+### 3. Configure Environment Variables
 
-Create a new file named `.env` in the root of your project and add the following content:
+Create a `.env.local` file in the root directory and configure the required keys:
 
 ```env
-NODE_ENV='development'
-NEXT_PUBLIC_BASE_URL=
-
-# CLERK
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
+# Clerk Authentication & Billing
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/
-NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 
-# VERCEL BLOB
-BLOB_READ_WRITE_TOKEN=
+# MongoDB Database Connection
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/bookified?retryWrites=true&w=majority
 
-# MONGODB
-MONGODB_URI=
+# Vapi AI & ElevenLabs
+NEXT_PUBLIC_VAPI_API_KEY=your_vapi_public_key
+NEXT_PUBLIC_ASSISTANT_ID=your_vapi_assistant_id
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
 
-# VAPI
-NEXT_PUBLIC_VAPI_API_KEY=
-VAPI_SERVER_SECRET=
-
-# Google Gemini API for embeddings
-GOOGLE_GEMINI_API_KEY=
-
-# ELEVENLABS
-ELEVENLABS_API_KEY=
+# Vercel Blob Storage
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
 ```
 
-Replace the placeholder values with your real credentials. You can get these by signing up at: [**Clerk**](https://clerk.com), [**Vercel**](https://vercel.com), [**MongoDB**](https://www.mongodb.com), [**Vapi**](https://vapi.ai), [**Google AI Studio**](https://aistudio.google.com), [**ElevenLabs**](https://elevenlabs.io).
-
-**Running the Project**
+### 4. Run the Development Server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## <a name="links">🔗 Assets</a>
+---
 
-Assets and snippets used in the project can be found in the **[video kit](https://jsmastery.com/video-kit/8127ec28-61db-4295-a85b-c649df6ee408)**.
+## 📁 Project Structure
 
-<a href="https://jsmastery.com/video-kit/8127ec28-61db-4295-a85b-c649df6ee408" target="_blank">
-  <img src="public/readme/readme-videokit.webp" alt="Video Kit Banner">
-</a>
+```text
+Bookified/
+├── app/
+│   ├── (root)/
+│   │   ├── books/new/          # Upload new book page
+│   │   ├── privacy/            # Privacy Policy (DPDP Act 2023)
+│   │   ├── subscriptions/      # Pricing & Clerk Billing Table
+│   │   ├── terms/              # Terms and Conditions (IT Act 2000)
+│   │   ├── loading.jsx         # Root shimmer skeleton loading
+│   │   └── page.jsx            # Library dashboard & search
+│   ├── api/
+│   │   ├── upload/             # Server-side Vercel Blob file upload
+│   │   └── vapi/search-book/   # Vapi webhook for live book context lookup
+│   ├── books/[slug]/           # Book interactive voice reader
+│   ├── globals.css             # Global design tokens and utilities
+│   └── layout.jsx              # Global layout with Navbar, Footer & Clerk
+├── components/
+│   ├── ui/                     # Accessible UI primitives (Button, Form, etc.)
+│   ├── BookCard.jsx            # Book presentation card
+│   ├── BookCardSkeleton.jsx    # Shimmer skeleton for library
+│   ├── FileUploader.jsx        # Drag-and-drop file uploader
+│   ├── Footer.jsx              # Compliant footer with causes & legal links
+│   ├── GoogleTranslate.jsx     # 20 Indian languages translation switcher
+│   ├── HeroSection.jsx         # Library banner with visual walkthrough
+│   ├── Navbar.jsx              # Floating auto-hiding responsive header
+│   ├── Search.jsx              # Real-time debounced library search
+│   ├── Transcript.jsx          # Live voice conversation transcript
+│   ├── UploadForm.jsx          # Multi-step book synthesis form
+│   ├── VapiControls.jsx        # Voice agent connection & mic controls
+│   └── VoiceSelector.jsx       # ElevenLabs assistant voice selector
+├── database/
+│   ├── models/                 # Mongoose schemas (Book, Segment, Session)
+│   └── mongoose.js             # Cached MongoDB connection handler
+├── hooks/
+│   ├── useSubscription.js      # Clerk subscription plan detection
+│   └── useVapi.js              # Real-time Vapi voice session lifecycle
+├── lib/
+│   ├── actions/                # Next.js Server Actions
+│   ├── constants.js            # Voices, limits, and UI presets
+│   ├── subscription-constants.js # Free / Standard / Pro tier limits
+│   └── utils.js                # PDF parser, slug generator, segmentation
+├── public/                     # Static assets, logos, and favicons
+└── jsconfig.json               # Path aliases configuration
+```
 
-## <a name="more">🚀 More</a>
+---
 
-**Advance your skills with Next.js Pro Course**
+## 🏛️ Legal & Grievance Redressal
 
-Enjoyed creating this project? Dive deeper into our PRO courses for a richer learning adventure. They're packed with
-detailed explanations, cool features, and exercises to boost your skills. Give it a go!
+In accordance with the **Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021** and the **Digital Personal Data Protection Act, 2023**:
 
-<a href="https://jsm.dev/books-jsm" target="_blank">
-  <img src="public/readme/readme-jsmpro.webp" alt="Project Banner">
-</a>
+- **Grievance & Data Protection Officer**: Nisarg Jayesh Delvadiya
+- **Email**: [nisarg.delvadiya1@zohomail.in](mailto:nisarg.delvadiya1@zohomail.in)
+- **Location**: Vadodara, Gujarat, Bharat
+
+---
+
+## 💛 Credits & Acknowledgments
+
+This project is built upon the foundation of the open-source **Bookified** tutorial and repository by **Adrian Hajdin (JavaScript Mastery)**:
+- Original Repository: [adrianhajdin/jsm_bookified](https://github.com/adrianhajdin/jsm_bookified)
+- Creator: [Adrian Hajdin / JavaScript Mastery](https://jsmastery.pro)
+
+Special thanks to the JavaScript Mastery community for providing an inspiring architectural baseline.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
