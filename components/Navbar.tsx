@@ -42,9 +42,9 @@ const Navbar = () => {
                         <SignedIn>
                             <div className="nav-user-link">
                                 <UserButton />
-                                {user?.firstName && (
+                                {(user?.firstName || user?.lastName) && (
                                     <Link href="/subscriptions" className="nav-user-name">
-                                        {user.firstName}
+                                        {user.fullName || [user.firstName, user.lastName].filter(Boolean).join(" ")}
                                     </Link>
                                 )}
                             </div>
