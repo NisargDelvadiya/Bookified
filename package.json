@@ -36,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.3.5",
+    "fast-uri": "^3.1.7",
     "flatted": "^3.4.4",
     "shadcn": "^3.8.5",
     "tailwindcss": "^4",
@@ -45,6 +46,7 @@
   "overrides": {
     "flatted": "^3.4.4",
     "@clerk/shared": "^3.47.8",
-    "undici": "^6.28.1"
+    "undici": "^6.28.1",
+    "fast-uri": "^3.1.7"
   }
 }
