@@ -966,6 +966,42 @@ button[data-variant='unstyled'] *,
   margin: 0 auto;
 }
 
+/* ==========================================================================
+   Google Translate Bar Suppression (Hide top banner, popups & body shift)
+   ========================================================================== */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+iframe.skiptranslate,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-ORHb,
+.VIpgJd-ZVi9od-vLmrdf,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  pointer-events: none !important;
+}
+
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
 /*!* Match the app's existing design system *!*/
 /*.clerk-pricing-container :deep(.cl-pricing-table) {*/
 /*  font-family: var(--font-mona-sans), sans-serif;*/

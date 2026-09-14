@@ -67,7 +67,31 @@ const GoogleTranslate = () => {
         };
 
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+
+        // Suppress Google Translate banner frame and body top offset
+        const observer = new MutationObserver(() => {
+            const banners = document.querySelectorAll('.goog-te-banner-frame, .VIpgJd-ZVi9od-ORHb-OEVmcd, iframe.skiptranslate');
+            banners.forEach((b) => {
+                b.style.setProperty('display', 'none', 'important');
+                b.style.setProperty('visibility', 'hidden', 'important');
+                b.style.setProperty('height', '0px', 'important');
+            });
+            if (document.body.style.top && document.body.style.top !== '0px') {
+                document.body.style.setProperty('top', '0px', 'important');
+            }
+        });
+
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'class'],
+        });
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            observer.disconnect();
+        };
     }, []);
 
     const changeLanguage = (code) => {
