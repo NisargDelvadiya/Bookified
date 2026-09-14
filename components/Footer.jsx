@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import GoogleTranslate from './GoogleTranslate';
-import GrievanceOfficerCard from './GrievanceOfficerCard';
 import { Heart, ExternalLink } from 'lucide-react';
 
 const donationCauses = [
@@ -108,17 +107,7 @@ const Footer = () => {
                                     <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity" />
                                 </Link>
                             </li>
-                            <li>
-                                <Link href="/subscriptions" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                                    Pricing & Plans
-                                </Link>
-                            </li>
                         </ul>
-
-                        {/* Grievance Officer Card */}
-                        <div className="mt-4">
-                            <GrievanceOfficerCard />
-                        </div>
                     </div>
 
                     {/* 4. Language Selector */}
