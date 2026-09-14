@@ -48,11 +48,6 @@ const Footer = () => {
                         <p className="text-sm text-gray-400 leading-relaxed">
                             Empowering knowledge seekers through AI-powered conversational reading. Turn your books into live, interactive voice sessions.
                         </p>
-                        <div className="pt-2">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-gray-300">
-                                Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline" /> in Bharat 🇮🇳
-                            </span>
-                        </div>
                     </div>
 
                     {/* 2. Supported Causes & Donations */}
