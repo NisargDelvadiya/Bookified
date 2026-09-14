@@ -41,7 +41,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                     {/* 1. Brand & Mission */}
                     <div className="space-y-4">
-                        <Link href="/" className="flex gap-2 items-center">
+                        <Link href="https://bookified-now.vercel.app" className="flex gap-2 items-center">
                             <Image src="/assets/logo.png" alt="Bookified Logo" width={38} height={24} className="brightness-110" />
                             <span className="font-serif font-bold text-2xl text-white tracking-wide">Bookified</span>
                         </Link>
