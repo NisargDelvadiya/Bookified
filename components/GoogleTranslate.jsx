@@ -112,7 +112,7 @@ const GoogleTranslate = () => {
                 <div
                     role="listbox"
                     aria-label="Available languages"
-                    className="absolute bottom-full mb-2 left-0 sm:left-auto sm:right-0 w-56 max-h-72 overflow-y-auto rounded-2xl bg-[#1e232d] text-white shadow-2xl ring-1 ring-black/5 z-50 p-1.5 focus:outline-none scrollbar-thin"
+                    className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 max-h-72 overflow-y-auto rounded-2xl bg-[#1e232d] text-white shadow-2xl ring-1 ring-black/5 z-50 p-1.5 focus:outline-none scrollbar-thin"
                 >
                     {INDIAN_LANGUAGES.map((lang) => {
                         const isSelected = selectedLanguage === lang.code;

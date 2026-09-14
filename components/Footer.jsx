@@ -42,7 +42,7 @@ const Footer = () => {
             className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800"
         >
             <div className="wrapper py-14">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                     {/* 1. Brand & Mission */}
                     <div className="space-y-4">
                         <Link href="https://bookified-now.vercel.app" className="flex gap-2 items-center">
@@ -109,21 +109,11 @@ const Footer = () => {
                             </li>
                         </ul>
                     </div>
-
-                    {/* 4. Language Selector */}
-                    <div className="space-y-4">
-                        <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
-                            Select Language
-                        </h4>
-                        <p className="text-xs text-gray-400">
-                            Translate Bookified into official Indian regional languages:
-                        </p>
-                        <GoogleTranslate />
-                    </div>
                 </div>
 
-                {/* Bottom Copyright Bar */}
-                <div className="border-t border-gray-800 mt-12 pt-6 text-center text-xs text-gray-400">
+                {/* Bottom Copyright Bar with Translation Option Box */}
+                <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col items-center gap-4 text-center text-xs text-gray-400">
+                    <GoogleTranslate />
                     <p>
                         © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 | Bookified™ • All Rights Reserved
                     </p>
