@@ -43,7 +43,7 @@ const Footer = () => {
             className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800"
         >
             <div className="wrapper py-14">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                     {/* 1. Brand & Mission */}
                     <div className="space-y-4 max-w-sm">
                         <Link href="https://bookified-now.vercel.app" className="flex gap-2.5 items-center" aria-label="Bookified Home">
@@ -92,15 +92,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* 3. Feedback & Community */}
-                    <div className="space-y-4">
-                        <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
-                            Feedback & Support
-                        </h4>
-                        <ZohoFeedbackModal />
-                    </div>
-
-                    {/* 4. Supported Causes & Donations */}
+                    {/* 3. Supported Causes & Donations */}
                     <div className="space-y-4">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Supported Causes & Donations
@@ -123,9 +115,12 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Bottom Copyright Bar with Translation Option Box */}
+                {/* Bottom Copyright Bar with Translation & Feedback Buttons */}
                 <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col items-center gap-4 text-center text-xs text-gray-400">
-                    <GoogleTranslate />
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                        <GoogleTranslate />
+                        <ZohoFeedbackModal buttonOnly={true} />
+                    </div>
                     <p>
                         © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 |{' '}
                         <Link

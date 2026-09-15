@@ -5,7 +5,7 @@ import { MessageSquarePlus } from 'lucide-react';
 
 const FORM_PERMA_URL = 'https://forms.zohopublic.in/delvadiyagroupstechzoho1/form/FeedbackForm/formperma/yLVmZL149fgY4EtC4BAa6IHe_euBvrsR4M8iYSlce30?zf_rszfm=1';
 
-export default function ZohoFeedbackModal() {
+export default function ZohoFeedbackModal({ buttonOnly = false }) {
     const deleteZForm = useCallback(() => {
         const divCont = document.getElementById('formsLightBox_248523');
         if (divCont) {
@@ -224,7 +224,7 @@ export default function ZohoFeedbackModal() {
     }, [deleteZForm]);
 
     return (
-        <div className="space-y-3">
+        <div className={buttonOnly ? "inline-flex" : "space-y-3"}>
             {/* Scoped CSS for Zoho Lightbox */}
             <style jsx global>{`
                 .zf_lB_Dimmer_248523 {
@@ -369,14 +369,23 @@ export default function ZohoFeedbackModal() {
                 }
 
                 @media only screen and (min-width: 601px) and (max-width: 700px) {
-                    .zf_lB_Container_248523 {
-                        width: 540px;
+                        width: 95% !important;
+                        height: 90% !important;
+                    }
+                    .zf_lb_closeform_248523 {
+                        right: 8px;
+                        top: 8px;
                     }
                 }
 
-                @media only screen and (min-width: 700px) and (max-width: 800px) {
+                @media screen and (min-device-width: 381px) and (max-device-width: 800px) {
                     .zf_lB_Container_248523 {
-                        width: 650px;
+                        width: 90% !important;
+                        height: 90% !important;
+                    }
+                    .zf_lb_closeform_248523 {
+                        right: 8px;
+                        top: 8px;
                     }
                 }
 
@@ -388,19 +397,21 @@ export default function ZohoFeedbackModal() {
             `}</style>
 
             {/* Description & Action Button */}
-            <p className="text-sm text-gray-300/90 leading-relaxed">
-                Have ideas, suggestions, or found an issue? We’d love to hear your thoughts.
-            </p>
+            {!buttonOnly && (
+                <p className="text-sm text-gray-300/90 leading-relaxed">
+                    Have ideas, suggestions, or found an issue? We’d love to hear your thoughts.
+                </p>
+            )}
 
             <button
                 id="zf_button_248523"
                 type="button"
                 onClick={showZForm}
-                className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-medium border border-white/15 hover:border-white/30 transition-all duration-200 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.98]"
+                className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/80 dark:bg-[#1a2332] hover:bg-white dark:hover:bg-[#222e42] text-[#212a3b] dark:text-gray-200 hover:text-black dark:hover:text-white text-sm font-medium border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-[#212a3b] focus-visible:outline-none active:scale-[0.98]"
                 aria-haspopup="dialog"
                 aria-label="Open Feedback Form"
             >
-                <MessageSquarePlus className="w-4 h-4 text-[#F6D5AB] group-hover:scale-110 transition-transform duration-200" />
+                <MessageSquarePlus className="w-4 h-4 text-[#F2994A] dark:text-[#F6D5AB] group-hover:scale-110 transition-transform duration-200" />
                 <span>Share Feedback</span>
             </button>
         </div>
