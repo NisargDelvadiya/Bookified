@@ -115,13 +115,9 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Bottom Copyright Bar with Translation & Feedback Buttons */}
-                <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col items-center gap-4 text-center text-xs text-gray-400">
-                    <div className="flex flex-wrap items-center justify-center gap-3">
-                        <GoogleTranslate />
-                        <ZohoFeedbackModal buttonOnly={true} />
-                    </div>
-                    <p>
+                {/* Bottom Copyright Bar with Feedback & Translation Buttons in Single Line */}
+                <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+                    <p className="text-center sm:text-left order-2 sm:order-1">
                         © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 |{' '}
                         <Link
                             href="https://bookified-now.vercel.app"
@@ -131,6 +127,11 @@ const Footer = () => {
                         </Link>{' '}
                         • All Rights Reserved
                     </p>
+
+                    <div className="flex items-center gap-3 order-1 sm:order-2 shrink-0">
+                        <ZohoFeedbackModal buttonOnly={true} />
+                        <GoogleTranslate />
+                    </div>
                 </div>
             </div>
         </footer>

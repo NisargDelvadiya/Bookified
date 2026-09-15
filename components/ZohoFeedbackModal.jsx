@@ -411,7 +411,7 @@ export default function ZohoFeedbackModal({ buttonOnly = false }) {
                 aria-haspopup="dialog"
                 aria-label="Open Feedback Form"
             >
-                <MessageSquarePlus className="w-4 h-4 text-[#F2994A] dark:text-[#F6D5AB] group-hover:scale-110 transition-transform duration-200" />
+                <MessageSquarePlus className="w-4 h-4 text-black dark:text-gray-300 group-hover:scale-110 transition-transform duration-200" />
                 <span>Share Feedback</span>
             </button>
         </div>
