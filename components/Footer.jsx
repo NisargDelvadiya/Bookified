@@ -43,7 +43,7 @@ const Footer = () => {
             className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800"
         >
             <div className="wrapper py-14">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-10 md:gap-12">
                     {/* 1. Brand & Mission */}
                     <div className="space-y-4 max-w-sm">
                         <Link href="https://bookified-now.vercel.app" className="flex gap-2.5 items-center" aria-label="Bookified Home">
@@ -62,7 +62,7 @@ const Footer = () => {
                     </div>
 
                     {/* 2. Legal & Indian Compliance */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 shrink-0">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Legal & Compliance
                         </h4>
@@ -93,7 +93,7 @@ const Footer = () => {
                     </div>
 
                     {/* 3. Supported Causes & Donations */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 shrink-0">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Supported Causes & Donations
                         </h4>
