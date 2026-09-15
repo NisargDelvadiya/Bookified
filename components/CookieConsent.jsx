@@ -128,19 +128,11 @@ export default function CookieConsent() {
                     .
                 </p>
 
-                <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-                    <button
-                        type="button"
-                        onClick={handleDismiss}
-                        className="text-xs text-slate-400 hover:text-slate-200 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors text-center"
-                    >
-                        Remind me in 30s
-                    </button>
-
+                <div className="mt-4 flex justify-end">
                     <button
                         type="button"
                         onClick={handleAccept}
-                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F2C94C] to-[#F2994A] text-[#0F172A] text-sm font-semibold hover:brightness-110 active:scale-95 transition-all shadow-md shadow-[#F2C94C]/15 flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F2C94C] to-[#F2994A] text-[#0F172A] text-sm font-semibold hover:brightness-110 active:scale-95 transition-all shadow-md shadow-[#F2C94C]/15 flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                         <ShieldCheck className="w-4 h-4" />
                         Accept All
