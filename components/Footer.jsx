@@ -19,9 +19,19 @@ const donationCauses = [
         url: 'https://hindu.fund/',
     },
     {
+        name: 'Adiveda',
+        subtitle: 'Spreading Knowledge of Sanatan Dharma',
+        url: 'https://www.adiveda.com',
+    },
+    {
         name: 'Veducation',
         subtitle: 'Vedic Knowledge for Next Gen',
         url: 'https://www.veducation.world/',
+    },
+    {
+        name: 'Adiveda',
+        subtitle: 'Sanskrit & Vedic Heritage',
+        url: 'https://www.adiveda.com/',
     },
     {
         name: 'Shiv Dhaam',
@@ -104,6 +114,7 @@ const Footer = () => {
                                         href={cause.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        title={cause.subtitle}
                                         className="group inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors"
                                     >
                                         <span className="group-hover:underline underline-offset-4">{cause.name}</span>
