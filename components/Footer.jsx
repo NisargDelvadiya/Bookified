@@ -20,18 +20,13 @@ const donationCauses = [
     },
     {
         name: 'Adiveda',
-        subtitle: 'Spreading Knowledge of Sanatan Dharma',
+        subtitle: 'Preserving Sanskrit & Sanatan Dharma',
         url: 'https://www.adiveda.com',
     },
     {
         name: 'Veducation',
         subtitle: 'Vedic Knowledge for Next Gen',
         url: 'https://www.veducation.world/',
-    },
-    {
-        name: 'Adiveda',
-        subtitle: 'Sanskrit & Vedic Heritage',
-        url: 'https://www.adiveda.com/',
     },
     {
         name: 'Shiv Dhaam',
