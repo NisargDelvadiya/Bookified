@@ -24,7 +24,7 @@
 - 🌐 **Multi-Language Support (20 Indian Languages)**: Seamlessly translate the interface into 20 regional Indian languages via custom Google Translate integration.
 - 💳 **Flexible Subscription Plans**: Built-in tiered access (Free, Standard, Pro) powered natively by Clerk User Billing.
 - ⚖️ **Indian Law Compliant**: Complete Terms & Conditions and Privacy Policy complying with the **Information Technology Act, 2000**, **SPDI Rules, 2011**, and **Digital Personal Data Protection (DPDP) Act, 2023**.
-- 🤝 **Support for Verified Causes**: Direct links to vetted Indian charitable and educational organizations including The Akshaya Patra Foundation, Hindu Fund, Veducation, Shiv Dhaam, and For The People.
+- 🤝 **Support for Verified Causes & NGOs**: Direct links to vetted Indian charitable organizations and NGOs including The Akshaya Patra Foundation, Hindu Fund, Sangam Talks, Adiveda, Raja Ravi Varma Heritage Foundation, Jaipur Foot (BMVSS), EcoSattva, Veducation, Shiv Dhaam, and For The People.
 - 📱 **Modern, Responsive & Accessible UI**: Fluid layouts, floating auto-hiding navigation, and shimmer skeleton loading states.
 
 ---

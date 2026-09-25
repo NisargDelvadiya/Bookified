@@ -1,7 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# ==============================================================================
+# Dependencies
+# ==============================================================================
 /node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,33 +13,138 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# ==============================================================================
+# Environment Variables & Secrets (CRITICAL: Never commit to public repos)
+# ==============================================================================
+.env
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+# Allow example and template environment files
+!.env.example
+!.env.template
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
+# Private keys, certificates, & credentials
 *.pem
-.output.txt
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.token
+*.secret
+id_rsa*
+id_ed25519*
+credentials.json
+client_secret*.json
+serviceAccountKey*.json
+google-services.json
+.credentials
 
-# debug
+# ==============================================================================
+# Production & Build Outputs
+# ==============================================================================
+/.next/
+.next/
+/out/
+out/
+/build
+build/
+/dist
+dist/
+/.output
+.output/
+*.tsbuildinfo
+
+# ==============================================================================
+# Testing & Code Coverage
+# ==============================================================================
+/coverage
+coverage/
+*.lcov
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+test-results/
+
+# ==============================================================================
+# Logs & Diagnostic Outputs
+# ==============================================================================
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 .pnpm-debug.log*
+lerna-debug.log*
+.output.txt
 
-# env files
-.env*
-!.env.example
+# ==============================================================================
+# Caches & Performance Stores
+# ==============================================================================
+.turbo/
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.prettiercache
 
-# vercel
+# ==============================================================================
+# Hosting & Deployment
+# ==============================================================================
 .vercel
+.serverless/
 
-# typescript/build
-*.tsbuildinfo
+# ==============================================================================
+# IDE & Code Editor Configurations
+# ==============================================================================
+.idea/
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*~
+.project
+.classpath
+.settings/
+
+# ==============================================================================
+# Operating System & Filesystem Artifacts
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==============================================================================
+# AI Assistants & Local Tooling Scratch
+# ==============================================================================
+.gemini/
+.claude/
+
+# ==============================================================================
+# Markdown Files (Ignore internal notes/docs, keep public repository docs)
+# ==============================================================================
+*.md
+!README.md
+!SECURITY.md
+
