@@ -24,14 +24,14 @@ const donationCauses = [
         url: 'https://sangamtalks.org',
     },
     {
-        name: 'Adiveda',
-        subtitle: 'Preserving Sanskrit & Sanatan Dharma',
-        url: 'https://www.adiveda.com',
-    },
-    {
         name: 'Veducation',
         subtitle: 'Vedic Knowledge for Next Gen',
         url: 'https://www.veducation.world/',
+    },
+    {
+        name: 'Adiveda',
+        subtitle: 'Preserving Sanskrit & Sanatan Dharma',
+        url: 'https://www.adiveda.com',
     },
     {
         name: 'Shiv Dhaam',
