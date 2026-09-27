@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useClerk } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton, useUser, useClerk } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -89,6 +89,11 @@ const Navbar = () => {
                                     </button>
                                 )}
                             </div>
+                            <SignOutButton>
+                                <button className="text-red-500 hover:text-red-600 font-semibold text-[15px] transition-colors cursor-pointer">
+                                    Log out
+                                </button>
+                            </SignOutButton>
                         </SignedIn>
                     </div>
                 </nav>
