@@ -170,7 +170,16 @@ const Footer = () => {
                 {/* Bottom Copyright Bar with Feedback & Translation Buttons in Single Line */}
                 <div className="border-t border-gray-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
                     <p className="text-center sm:text-left order-2 sm:order-1 leading-relaxed">
-                        © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 |{' '}
+                        © 2026 • Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline mx-0.5" /> in Bharat 🇮🇳 by{' '}
+                        <Link
+                            href="https://www.nisargjayeshdelvadiya.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-white hover:underline underline-offset-2 transition-colors font-normal text-gray-300"
+                        >
+                            Nisarg Jayesh Delvadiya
+                        </Link>{' '}
+                        |{' '}
                         <Link
                             href="https://bookified-now.vercel.app"
                             className="hover:text-white hover:underline underline-offset-2 transition-colors font-normal text-gray-300"

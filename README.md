@@ -10,7 +10,7 @@
   <p>An intelligent web application that transforms standard PDF books into living, interactive AI reading companions with real-time voice synthesis and instant conversational insights.</p>
 
   <p>
-    <b>Made with ❤️ in Bharat 🇮🇳 | Bookified™</b>
+    <b>Made with ❤️ in Bharat 🇮🇳 by <a href="https://www.nisargjayeshdelvadiya.com" target="_blank">Nisarg Jayesh Delvadiya</a> | Bookified™</b>
   </p>
 </div>
 
