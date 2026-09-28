@@ -145,10 +145,27 @@ export function useVapi(book, customVoice = null) {
                     if (message.role === 'user') setCurrentUserMessage('');
 
                     setMessages((prev) => {
-                        const isDupe = prev.some(
-                            (m) => m.role === message.role && m.content === message.transcript,
-                        );
-                        return isDupe ? prev : [...prev, { role: message.role, content: message.transcript }];
+                        if (prev.length === 0) {
+                            return [{ role: message.role, content: message.transcript }];
+                        }
+                        const lastMsg = prev[prev.length - 1];
+                        
+                        // Prevent exact duplicates
+                        if (lastMsg.role === message.role && lastMsg.content.endsWith(message.transcript)) {
+                            return prev;
+                        }
+
+                        // If the same role is speaking, merge the text into the same box (ChatGPT style)
+                        if (lastMsg.role === message.role) {
+                            const updatedLastMsg = { 
+                                ...lastMsg, 
+                                content: lastMsg.content + ' ' + message.transcript 
+                            };
+                            return [...prev.slice(0, -1), updatedLastMsg];
+                        }
+                        
+                        // Otherwise, start a new box for the new role
+                        return [...prev, { role: message.role, content: message.transcript }];
                     });
                 }
             },

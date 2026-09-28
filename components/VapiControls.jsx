@@ -7,7 +7,7 @@ import Transcript from "@/components/Transcript";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { voiceOptions, DEFAULT_VOICE } from "@/lib/constants";
+import { voiceOptions, DEFAULT_VOICE, voiceCategories } from "@/lib/constants";
 
 const VapiControls = ({ book }) => {
     const router = useRouter();
@@ -116,11 +116,15 @@ const VapiControls = ({ book }) => {
                                 className="bg-transparent border-b border-gray-300 text-[#3d485e] font-medium focus:ring-0 cursor-pointer p-0 text-sm pb-0.5 outline-none"
                                 title="Change AI Voice"
                             >
-                                {Object.keys(voiceOptions).map((key) => (
-                                    <option key={key} value={key}>
-                                        {voiceOptions[key].name}
-                                    </option>
-                                ))}
+                                {Object.keys(voiceOptions).map((key) => {
+                                    const isMale = voiceCategories.male.includes(key);
+                                    const emoji = isMale ? "👨" : "👩";
+                                    return (
+                                        <option key={key} value={key}>
+                                            {emoji} {voiceOptions[key].name}
+                                        </option>
+                                    );
+                                })}
                             </select>
                         </div>
 
