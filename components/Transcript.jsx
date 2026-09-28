@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Mic, Copy, Check } from 'lucide-react';
+import { Mic, Copy, Check, Flag } from 'lucide-react';
 
 const CopyButton = ({ text }) => {
   const [copied, setCopied] = useState(false);
@@ -86,9 +86,19 @@ const Transcript = ({ messages = [], currentMessage = '', currentUserMessage = '
             {message.content}
           </div>
           
-          {/* Copy Button (only visible on hover) */}
-          <div className={`opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+          {/* Actions (only visible on hover) */}
+          <div className={`opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <CopyButton text={message.content} />
+            
+            {message.role === 'assistant' && (
+              <button 
+                className="p-1 text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 text-xs font-medium"
+                title="Report issue"
+              >
+                <Flag className="w-3.5 h-3.5" />
+                <span>Report</span>
+              </button>
+            )}
           </div>
         </div>
       ))}
