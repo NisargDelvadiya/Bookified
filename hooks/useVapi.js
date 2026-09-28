@@ -37,7 +37,7 @@ function getVapi() {
     return vapiInstance;
 }
 
-export function useVapi(book) {
+export function useVapi(book, customVoice = null) {
     const { userId } = useAuth();
     const { limits } = useSubscription();
 
@@ -57,7 +57,7 @@ export function useVapi(book) {
     const maxDurationSeconds = limits?.maxDurationPerSession ? limits.maxDurationPerSession * 60 : (15 * 60);
     const maxDurationRef = useLatestRef(maxDurationSeconds);
     const durationRef = useLatestRef(duration);
-    const voice = book?.persona || DEFAULT_VOICE;
+    const voice = customVoice || book?.persona || DEFAULT_VOICE;
 
     useEffect(() => {
         const instance = getVapi();

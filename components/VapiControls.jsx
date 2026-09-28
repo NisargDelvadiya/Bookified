@@ -6,9 +6,14 @@ import Image from "next/image";
 import Transcript from "@/components/Transcript";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { voiceOptions, DEFAULT_VOICE } from "@/lib/constants";
 
 const VapiControls = ({ book }) => {
+    const router = useRouter();
+    const [showTranscript, setShowTranscript] = useState(false);
+    const [selectedVoice, setSelectedVoice] = useState(book?.persona || DEFAULT_VOICE);
+
     const {
         status,
         isActive,
@@ -22,10 +27,7 @@ const VapiControls = ({ book }) => {
         limitError,
         isBillingError,
         maxDurationSeconds,
-    } = useVapi(book);
-
-    const router = useRouter();
-    const [showTranscript, setShowTranscript] = useState(false);
+    } = useVapi(book, selectedVoice);
 
     useEffect(() => {
         if (limitError) {
@@ -105,8 +107,21 @@ const VapiControls = ({ book }) => {
                             <span className="vapi-status-text">{statusDisplay.label}</span>
                         </div>
 
-                        <div className="vapi-status-indicator">
-                            <span className="vapi-status-text">Voice: {book?.persona || "Daniel"}</span>
+                        <div className="vapi-status-indicator flex items-center gap-1.5">
+                            <span className="vapi-status-text">Voice:</span>
+                            <select
+                                value={selectedVoice}
+                                onChange={(e) => setSelectedVoice(e.target.value)}
+                                disabled={isActive}
+                                className="bg-transparent border-b border-gray-300 text-[#3d485e] font-medium focus:ring-0 cursor-pointer p-0 text-sm pb-0.5 outline-none"
+                                title="Change AI Voice"
+                            >
+                                {Object.keys(voiceOptions).map((key) => (
+                                    <option key={key} value={key}>
+                                        {voiceOptions[key].name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="vapi-status-indicator">
