@@ -7,6 +7,7 @@ const VoiceSessionSchema = new Schema({
     endedAt: { type: Date },
     durationSeconds: { type: Number, default: 0, required: true },
     billingPeriodStart: { type: Date, required: true, index: true },
+    transcript: { type: Array, default: [] },
 }, { timestamps: true });
 
 VoiceSessionSchema.index({ clerkId: 1, billingPeriodStart: 1 });

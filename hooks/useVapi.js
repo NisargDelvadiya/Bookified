@@ -57,6 +57,7 @@ export function useVapi(book, customVoice = null) {
     const maxDurationSeconds = limits?.maxDurationPerSession ? limits.maxDurationPerSession * 60 : (15 * 60);
     const maxDurationRef = useLatestRef(maxDurationSeconds);
     const durationRef = useLatestRef(duration);
+    const messagesRef = useLatestRef(messages);
     const voice = customVoice || book?.persona || DEFAULT_VOICE;
 
     useEffect(() => {
@@ -100,7 +101,7 @@ export function useVapi(book, customVoice = null) {
                 }
 
                 if (sessionIdRef.current) {
-                    endVoiceSession(sessionIdRef.current, durationRef.current).catch((err) =>
+                    endVoiceSession(sessionIdRef.current, durationRef.current, messagesRef.current).catch((err) =>
                         console.error('Failed to end voice session:', err),
                     );
                     sessionIdRef.current = null;
@@ -182,7 +183,7 @@ export function useVapi(book, customVoice = null) {
                 }
 
                 if (sessionIdRef.current) {
-                    endVoiceSession(sessionIdRef.current, durationRef.current).catch((err) =>
+                    endVoiceSession(sessionIdRef.current, durationRef.current, messagesRef.current).catch((err) =>
                         console.error('Failed to end voice session on error:', err),
                     );
                     sessionIdRef.current = null;
@@ -208,7 +209,7 @@ export function useVapi(book, customVoice = null) {
         return () => {
             if (sessionIdRef.current) {
                 instance.stop();
-                endVoiceSession(sessionIdRef.current, durationRef.current).catch((err) =>
+                endVoiceSession(sessionIdRef.current, durationRef.current, messagesRef.current).catch((err) =>
                     console.error('Failed to end voice session on unmount:', err),
                 );
                 sessionIdRef.current = null;
