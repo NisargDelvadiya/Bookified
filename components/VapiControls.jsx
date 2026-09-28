@@ -25,6 +25,7 @@ const VapiControls = ({ book }) => {
     } = useVapi(book);
 
     const router = useRouter();
+    const [showTranscript, setShowTranscript] = useState(false);
 
     useEffect(() => {
         if (limitError) {
@@ -117,14 +118,42 @@ const VapiControls = ({ book }) => {
                 </div>
             </div>
 
-            <div className="vapi-transcript-wrapper">
-                <div className="transcript-container min-h-[400px]">
-                    <Transcript
-                        messages={messages}
-                        currentMessage={currentMessage}
-                        currentUserMessage={currentUserMessage}
-                    />
-                </div>
+            <div className="vapi-transcript-wrapper flex flex-col items-center">
+                {!showTranscript ? (
+                    <div className="flex flex-col items-center justify-center w-full min-h-[300px] py-10">
+                        {isActive ? (
+                            <div className="relative flex items-center justify-center w-40 h-40">
+                                <div className={`absolute inset-0 rounded-full ${status === 'listening' ? 'bg-blue-400' : status === 'thinking' ? 'bg-purple-400' : 'bg-green-400'} opacity-30 animate-ping`} style={{ animationDuration: status === 'speaking' ? '1s' : '2s' }} />
+                                <div className={`absolute inset-4 rounded-full ${status === 'listening' ? 'bg-blue-500' : status === 'thinking' ? 'bg-purple-500' : 'bg-green-500'} opacity-50 animate-pulse`} />
+                                <div className={`absolute inset-8 rounded-full ${status === 'listening' ? 'bg-blue-600' : status === 'thinking' ? 'bg-purple-600' : 'bg-green-600'} opacity-80`} />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center gap-4 text-gray-400">
+                                <MicOff className="size-16 opacity-30" />
+                                <p className="text-lg">Click the mic above to start.</p>
+                            </div>
+                        )}
+                        
+                        <p className="mt-12 text-xl font-medium capitalize text-[#212a3b] tracking-wide">
+                            {status === 'idle' ? '' : `${status}...`}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="transcript-container min-h-[400px] w-full mt-2">
+                        <Transcript
+                            messages={messages}
+                            currentMessage={currentMessage}
+                            currentUserMessage={currentUserMessage}
+                        />
+                    </div>
+                )}
+                
+                <button 
+                    onClick={() => setShowTranscript(!showTranscript)}
+                    className="mt-4 mb-4 px-6 py-2.5 rounded-full border border-gray-300 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors shadow-sm"
+                >
+                    {showTranscript ? "Hide Conversation History" : "View Conversation History"}
+                </button>
             </div>
         </div>
     );
