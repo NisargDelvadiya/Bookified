@@ -1,7 +1,37 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { Mic } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Mic, Copy, Check } from 'lucide-react';
+
+const CopyButton = ({ text }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="p-1 text-gray-400 hover:text-gray-700 transition-colors flex items-center gap-1 text-xs font-medium"
+      title="Copy text"
+    >
+      {copied ? (
+        <>
+          <Check className="w-3.5 h-3.5 text-green-600" />
+          <span className="text-green-600">Copied!</span>
+        </>
+      ) : (
+        <>
+          <Copy className="w-3.5 h-3.5" />
+          <span>Copy</span>
+        </>
+      )}
+    </button>
+  );
+};
 
 const Transcript = ({ messages = [], currentMessage = '', currentUserMessage = '' }) => {
   const scrollRef = useRef(null);
@@ -44,7 +74,7 @@ const Transcript = ({ messages = [], currentMessage = '', currentUserMessage = '
       {messages.map((message, index) => (
         <div
           key={index}
-          className={`transcript-message ${
+          className={`transcript-message group flex flex-col gap-1 ${
             message.role === 'user' ? 'transcript-message-user' : 'transcript-message-assistant'
           }`}
         >
@@ -54,6 +84,11 @@ const Transcript = ({ messages = [], currentMessage = '', currentUserMessage = '
             }`}
           >
             {message.content}
+          </div>
+          
+          {/* Copy Button (only visible on hover) */}
+          <div className={`opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <CopyButton text={message.content} />
           </div>
         </div>
       ))}
