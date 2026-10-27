@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth, useUser } from "@clerk/nextjs";
-import { PLANS, PLAN_LIMITS } from "@/lib/subscription-constants";
+import { PLANS, PLAN_LIMITS, PLAN_DETAILS } from "@/lib/subscription-constants";
 
 export const useSubscription = () => {
     const { has, isLoaded: isAuthLoaded } = useAuth();
@@ -13,32 +13,39 @@ export const useSubscription = () => {
         return {
             plan: PLANS.FREE,
             limits: PLAN_LIMITS[PLANS.FREE],
-            isLoaded: false
+            details: PLAN_DETAILS[PLANS.FREE],
+            isFree: true,
+            isStandard: false,
+            isPro: false,
+            isLoaded: false,
         };
     }
 
     let plan = PLANS.FREE;
 
-    // 1. First Check: Clerk's `has` helper from useAuth
-    if (has?.({ product: 'pro' }) || has?.({ plan: 'pro' })) {
+    // 1. Clerk user public metadata (set via Razorpay verification)
+    const metadataPlan = (
+        user?.publicMetadata?.plan ||
+        user?.publicMetadata?.billingPlan
+    )?.toString().toLowerCase();
+
+    if (metadataPlan === "pro") {
         plan = PLANS.PRO;
-    } else if (has?.({ product: 'standard' }) || has?.({ plan: 'standard' })) {
+    } else if (metadataPlan === "standard") {
         plan = PLANS.STANDARD;
-    } 
-    // 2. Second Check: Fallback to user public metadata if `has` fails (caching issue)
-    else {
-        const metadataPlan = (user?.publicMetadata?.plan || user?.publicMetadata?.billingPlan)?.toString().toLowerCase();
-        
-        if (metadataPlan === 'pro') {
-            plan = PLANS.PRO;
-        } else if (metadataPlan === 'standard') {
-            plan = PLANS.STANDARD;
-        }
+    } else if (has?.({ product: "pro" }) || has?.({ plan: "pro" })) {
+        plan = PLANS.PRO;
+    } else if (has?.({ product: "standard" }) || has?.({ plan: "standard" })) {
+        plan = PLANS.STANDARD;
     }
 
     return {
         plan,
-        limits: PLAN_LIMITS[plan],
-        isLoaded: true
+        limits: PLAN_LIMITS[plan] || PLAN_LIMITS[PLANS.FREE],
+        details: PLAN_DETAILS[plan] || PLAN_DETAILS[PLANS.FREE],
+        isFree: plan === PLANS.FREE,
+        isStandard: plan === PLANS.STANDARD,
+        isPro: plan === PLANS.PRO,
+        isLoaded: true,
     };
 };

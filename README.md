@@ -22,9 +22,9 @@
 - 📚 **Automated PDF Parsing & Smart Segmentation**: Upload any readable PDF (up to 50MB) and automatically extract text segments and auto-generate book covers.
 - ⚡ **Lightning Fast Full-Text Search**: Instant search across your entire book library and chapter segments with MongoDB text indexing.
 - 🌐 **Multi-Language Support (20 Indian Languages)**: Seamlessly translate the interface into 20 regional Indian languages via custom Google Translate integration.
-- 💳 **Flexible Subscription Plans**: Built-in tiered access (Free, Standard, Pro) powered natively by Clerk User Billing.
+- 💳 **Flexible Subscription Plans**: Built-in tiered access (Free, Standard, Pro) powered by **Razorpay Payment Gateway** (UPI, Netbanking, Cards) and synced with Clerk.
 - ⚖️ **Indian Law Compliant**: Complete Terms & Conditions and Privacy Policy complying with the **Information Technology Act, 2000**, **SPDI Rules, 2011**, and **Digital Personal Data Protection (DPDP) Act, 2023**.
-- 🤝 **Support for Verified Causes & NGOs**: Direct links to vetted Indian charitable organizations and NGOs including The Akshaya Patra Foundation, Hindu Fund, Sangam Talks, Raja Ravi Varma Heritage Foundation, Jaipur Foot (BMVSS), EcoSattva, Veducation, Adiveda, Shiv Dhaam, and For The People.
+- 🤝 **Support for Verified Causes**: Direct link to vetted Indian charitable initiative **Hindu Fund**.
 - 📱 **Modern, Responsive & Accessible UI**: Fluid layouts, floating auto-hiding navigation, and shimmer skeleton loading states.
 
 ---
@@ -34,7 +34,8 @@
 - **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
 - **Language**: JavaScript (ES2022 / JSX)
 - **Styling**: Tailwind CSS & Vanilla CSS
-- **Authentication & Billing**: [Clerk](https://clerk.com)
+- **Authentication**: [Clerk](https://clerk.com)
+- **Payment Gateway**: [Razorpay](https://razorpay.com) (UPI, Cards, Netbanking)
 - **Database & ODM**: [MongoDB Atlas](https://www.mongodb.com) & [Mongoose](https://mongoosejs.com)
 - **Voice AI Agent**: [Vapi AI](https://vapi.ai)
 - **Voice Synthesis**: [ElevenLabs](https://elevenlabs.io)
@@ -102,7 +103,7 @@ Bookified/
 │   ├── (root)/
 │   │   ├── books/new/          # Upload new book page
 │   │   ├── privacy/            # Privacy Policy (DPDP Act 2023)
-│   │   ├── subscriptions/      # Pricing & Clerk Billing Table
+│   │   ├── subscriptions/      # Pricing & Razorpay Payment Gateway
 │   │   ├── terms/              # Terms and Conditions (IT Act 2000)
 │   │   ├── loading.jsx         # Root shimmer skeleton loading
 │   │   └── page.jsx            # Library dashboard & search

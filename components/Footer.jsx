@@ -9,57 +9,9 @@ import { Heart, ExternalLink } from 'lucide-react';
 
 const donationCauses = [
     {
-        name: 'The Akshaya Patra Foundation',
-        subtitle: 'Mid-Day Meal Programme',
-        url: 'https://www.akshayapatra.org/donate-to-midday-meal-programme?utm_source=google&utm_medium=cpc&utm_campaign=gads&utm_content=lapsed-px-mdm-26&gad_source=1&gad_campaignid=23942140523&gbraid=0AAAAADtGwlyegnOx-VzkL8UHqs8vuzz7g&gclid=Cj0KCQjwteTUBhD4ARIsAEYjs3rUSyHEw9nWu5CbfvFXoTIkZdv4Ke30P2gYdi4b5n-ryB1I4cZs5BAaAukFEALw_wcB',
-    },
-    {
         name: 'Hindu Fund',
         subtitle: 'Preserving Heritage & Dharma',
         url: 'https://hindu.fund/',
-    },
-    {
-        name: 'Sangam Talks',
-        subtitle: 'Rebuilding Indian Civilization',
-        url: 'https://sangamtalks.org',
-    },
-    {
-        name: 'Veducation',
-        subtitle: 'Vedic Knowledge for Next Gen',
-        url: 'https://www.veducation.world/',
-    },
-    {
-        name: 'Adiveda',
-        subtitle: 'Preserving Sanskrit & Sanatan Dharma',
-        url: 'https://www.adiveda.com',
-    },
-    {
-        name: 'Shiv Dhaam',
-        subtitle: 'Spiritual Sanctuaries & Service',
-        url: 'https://www.shivdhaam.org.in/?gad_source=1&gad_campaignid=23949023171&gbraid=0AAAAA-wKSMMO4ZiZthKTvahdFl4GIwcLA&gclid=CjwKCAjwqJXUBhBNEiwA8BgG7ieXXDG3WGkjFA0uEGe8yEg6NRAmmD_r6jHUKL3IaqTBgIR3aL-AjBoCq5wQAvD_BwE',
-    },
-    {
-        name: 'For The People',
-        subtitle: 'Grassroots Community Upliftment',
-        url: 'https://forthepeople.in/en',
-    },
-];
-
-const ngoCauses = [
-    {
-        name: 'Raja Ravi Varma Heritage Foundation',
-        subtitle: "Preserving India's Art & Heritage",
-        url: 'https://rrvhfoundation.com/',
-    },
-    {
-        name: 'Jaipur Foot (BMVSS)',
-        subtitle: 'Free Prosthetics & Mobility for the Disabled',
-        url: 'https://www.jaipurfoot.org/',
-    },
-    {
-        name: 'EcoSattva',
-        subtitle: 'Ecological Restoration & Environmental Solutions',
-        url: 'https://www.ecosattva.in/',
     },
 ];
 
@@ -71,9 +23,9 @@ const Footer = () => {
             className="w-full bg-[#1b222f] text-gray-300 mt-20 border-t border-gray-800"
         >
             <div className="wrapper py-14">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-12 gap-8 lg:gap-8 xl:gap-10 items-start">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-start">
                     {/* 1. Brand & Mission */}
-                    <div className="space-y-4 xl:col-span-4">
+                    <div className="space-y-4 sm:col-span-2 lg:col-span-1 xl:col-span-6">
                         <Link href="https://bookified-now.vercel.app" className="flex gap-2.5 items-center w-fit" aria-label="Bookified Home">
                             <Image
                                 src="/assets/logo-white-hd.png"
@@ -84,13 +36,13 @@ const Footer = () => {
                             />
                             <span className="font-serif font-bold text-3xl text-white tracking-wide">Bookified</span>
                         </Link>
-                        <p className="text-[15px] sm:text-base text-gray-300/90 leading-relaxed max-w-sm">
+                        <p className="text-[15px] sm:text-base text-gray-300/90 leading-relaxed max-w-md">
                             Empowering knowledge seekers through AI-powered conversational reading. Turn your books into live, interactive voice sessions.
                         </p>
                     </div>
 
                     {/* 2. Legal */}
-                    <div className="space-y-4 xl:col-span-2">
+                    <div className="space-y-4 xl:col-span-3">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Legal
                         </h4>
@@ -120,30 +72,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* 3. NGOs */}
-                    <div className="space-y-4 xl:col-span-3">
-                        <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
-                            NGOs
-                        </h4>
-                        <ul className="space-y-2.5 flex flex-col">
-                            {ngoCauses.map((ngo) => (
-                                <li key={ngo.name}>
-                                    <a
-                                        href={ngo.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        title={ngo.subtitle}
-                                        className="group inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors"
-                                    >
-                                        <span className="group-hover:underline underline-offset-4">{ngo.name}</span>
-                                        <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* 4. Donations */}
+                    {/* 3. Donations */}
                     <div className="space-y-4 xl:col-span-3">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Donations
