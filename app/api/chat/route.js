@@ -249,8 +249,8 @@ Guidelines:
 - Answer questions about the book's themes, characters, plot, arguments, and ideas
 - Reference specific passages or ideas from the book when relevant
 - Be conversational and engaging, not robotic
-- If asked something outside the book's scope, gently redirect to book-related discussion
-- Keep responses concise but insightful (2-4 paragraphs max)
+- Always finish your sentences and provide complete, well-rounded answers without cutting off mid-thought
+- Keep responses readable and insightful (2-4 paragraphs max)
 ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${context}` : ""}`;
 
         // Build properly alternating conversation history for Gemini fallback
@@ -280,6 +280,10 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                     model: "gemini-3.8-flash",
                     system_instruction: systemPrompt,
                     input: fullPromptInput,
+                    generation_config: {
+                        thinking_level: "low",
+                        max_output_tokens: 4096,
+                    },
                 }),
             });
 
@@ -320,7 +324,7 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                                 contents,
                                 generationConfig: {
                                     temperature: 0.7,
-                                    maxOutputTokens: 600,
+                                    maxOutputTokens: 4096,
                                     topP: 0.85,
                                 },
                             }),
