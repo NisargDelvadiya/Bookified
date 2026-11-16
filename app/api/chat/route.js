@@ -43,6 +43,52 @@ async function getAvailableModel(apiKey) {
     return "gemini-1.5-flash";
 }
 
+// Format conversation history to strictly comply with Gemini API requirements:
+// 1. Roles must be 'user' or 'model'
+// 2. Multiturn turns must strictly alternate (merge consecutive turns of same role)
+// 3. First turn must be 'user'
+function formatGeminiContents(history = [], currentMessage = "") {
+    const rawItems = [
+        ...history
+            .filter((h) => h.content && typeof h.content === "string" && h.content.trim().length > 0)
+            .map((h) => ({
+                role: h.role === "assistant" || h.role === "model" ? "model" : "user",
+                text: h.content.trim(),
+            })),
+    ];
+
+    if (currentMessage && currentMessage.trim()) {
+        rawItems.push({ role: "user", text: currentMessage.trim() });
+    }
+
+    // Merge consecutive messages with the same role into one turn
+    const merged = [];
+    for (const item of rawItems) {
+        if (merged.length > 0 && merged[merged.length - 1].role === item.role) {
+            merged[merged.length - 1].text += "\n\n" + item.text;
+        } else {
+            merged.push({ role: item.role, text: item.text });
+        }
+    }
+
+    // Gemini requires conversation to start with 'user'
+    while (merged.length > 0 && merged[0].role !== "user") {
+        merged.shift();
+    }
+
+    if (merged.length === 0) {
+        merged.push({ role: "user", text: currentMessage.trim() });
+    }
+
+    // Keep last 16 turns for context
+    const recent = merged.slice(-16);
+
+    return recent.map((m) => ({
+        role: m.role,
+        parts: [{ text: m.text }],
+    }));
+}
+
 // Search book segments for relevant context
 async function getBookContext(bookId, query) {
     try {
@@ -204,24 +250,16 @@ Guidelines:
 - Keep responses concise but insightful (2-4 paragraphs max)
 ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${context}` : ""}`;
 
-        // Build conversation history for Gemini (last 16 messages for context window management)
-        const recentHistory = history.slice(-16);
-        const contents = [
-            ...recentHistory.map((h) => ({
-                role: h.role === "assistant" ? "model" : "user",
-                parts: [{ text: h.content }],
-            })),
-            { role: "user", parts: [{ text: message }] },
-        ];
+        // Build properly alternating conversation history for Gemini
+        const contents = formatGeminiContents(history, message);
 
-        // Dynamically get the best available model supported by this API key
-        const detectedModel = await getAvailableModel(apiKey);
+        const dynamicModel = await getAvailableModel(apiKey);
         const modelsToTry = [
-            detectedModel,
+            dynamicModel,
             "gemini-1.5-flash",
-            "gemini-2.5-flash",
-            "gemini-1.5-pro",
-        ].filter((val, idx, arr) => arr.indexOf(val) === idx);
+            "gemini-1.5-flash-latest",
+            "gemini-2.0-flash",
+        ].filter((m, i, arr) => m && arr.indexOf(m) === i);
 
         let text = null;
         let lastError = null;
@@ -252,10 +290,11 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                 } else {
                     const err = await geminiResponse.json();
                     lastError = err?.error?.message || `Model ${modelName} request failed`;
-                    console.warn(`Failed with ${modelName}:`, lastError);
+                    console.error(`Gemini API error with ${modelName}:`, err);
                 }
             } catch (fetchErr) {
                 lastError = fetchErr.message;
+                console.error(`Fetch exception with ${modelName}:`, fetchErr);
             }
         }
 

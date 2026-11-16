@@ -170,7 +170,7 @@ const BookReader = ({ book }) => {
                     bookId: book?._id,
                     bookTitle: book?.title,
                     bookAuthor: book?.author,
-                    history: [...history, { role: "user", content: text }],
+                    history,
                 }),
             });
 
