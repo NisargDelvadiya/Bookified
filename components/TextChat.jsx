@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2, MessageSquare, RotateCcw, Mic } from "lucide-react";
+import Image from "next/image";
+import { Send, Bot, User, Loader2, RotateCcw, Mic } from "lucide-react";
 
 const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) => {
     const [input, setInput] = useState("");
@@ -100,15 +101,24 @@ const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) =>
     return (
         <div className="max-w-4xl mx-auto flex flex-col gap-4">
             {/* Chat Header */}
-            <div className="vapi-header-card flex-row items-center justify-between gap-4 py-4">
-                <div className="flex items-center gap-3 flex-1">
-                    <div className="w-10 h-10 rounded-full bg-[#212a3b] flex items-center justify-center shrink-0">
-                        <MessageSquare className="w-5 h-5 text-white" />
+            <div className="vapi-header-card flex-row items-center justify-between gap-4 py-3 px-5">
+                <div className="flex items-center gap-4 flex-1">
+                    <div className="w-[52px] h-[78px] rounded-lg overflow-hidden relative shadow-md shrink-0 bg-gray-100 border border-gray-200">
+                        <Image
+                            src={book?.coverURL || "/images/book-placeholder.png"}
+                            alt={book?.title || "Book Cover"}
+                            fill
+                            className="object-cover"
+                            sizes="52px"
+                            priority
+                        />
                     </div>
                     <div>
-                        <h2 className="font-bold text-[#212a3b] text-lg leading-tight">{book?.title}</h2>
-                        <p className="text-sm text-[#3d485e]">
-                            Unified conversation · Voice & Text synced
+                        <h2 className="font-serif font-bold text-[#212a3b] text-xl leading-tight">
+                            {book?.title}
+                        </h2>
+                        <p className="text-sm font-medium text-[#3d485e] mt-1">
+                            by {book?.author}
                         </p>
                     </div>
                 </div>
