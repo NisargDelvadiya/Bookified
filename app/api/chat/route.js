@@ -143,17 +143,17 @@ export async function DELETE(request) {
         }
 
         await connectToDatabase();
-        await ChatConversation.findOneAndDelete({
-            clerkId: userId,
-            bookId: new mongoose.Types.ObjectId(bookId),
+        const bookObjectId = new mongoose.Types.ObjectId(bookId);
+
+        await ChatConversation.deleteMany({
+            bookId: bookObjectId,
         });
 
         // Also clean up old legacy voice session transcripts for this book
         try {
             const VoiceSession = (await import("@/database/models/voice-session.model")).default;
             await VoiceSession.deleteMany({
-                clerkId: userId,
-                bookId: new mongoose.Types.ObjectId(bookId),
+                bookId: bookObjectId,
             });
         } catch (vErr) {
             console.warn("Could not delete legacy voice sessions:", vErr);

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import useVapi from "@/hooks/useVapi";
 import { voiceOptions, DEFAULT_VOICE, voiceCategories } from "@/lib/constants";
+import { clearBookConversation } from "@/lib/actions/session.actions";
 
 const CopyButton = ({ text }) => {
     const [copied, setCopied] = useState(false);
@@ -206,7 +207,7 @@ const BookReader = ({ book }) => {
 
         setMessages([defaultGreeting]);
         try {
-            localStorage.removeItem(storageKey);
+            localStorage.setItem(storageKey, JSON.stringify([defaultGreeting]));
             localStorage.removeItem(`bookified_voice_transcript_${book?._id}`);
             localStorage.removeItem(`bookified_chat_${book?._id}`);
         } catch (e) {
@@ -214,6 +215,7 @@ const BookReader = ({ book }) => {
         }
 
         try {
+            await clearBookConversation(book?._id);
             await fetch(`/api/chat?bookId=${book?._id}`, { method: "DELETE" });
             toast.success("Conversation history cleared.");
         } catch (e) {
