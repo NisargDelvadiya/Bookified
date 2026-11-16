@@ -25,6 +25,9 @@ async function getAvailableModel(apiKey) {
                 .map((m) => m.name.replace(/^models\//, ""));
 
             const chosen =
+                models.find((m) => m === "gemini-3.8-flash") ||
+                models.find((m) => m.includes("3.8-flash")) ||
+                models.find((m) => m.includes("2.5-flash")) ||
                 models.find((m) => m.includes("flash") && !m.includes("8b") && !m.includes("preview")) ||
                 models.find((m) => m.includes("flash")) ||
                 models.find((m) => m.includes("gemini")) ||
@@ -40,7 +43,7 @@ async function getAvailableModel(apiKey) {
         console.warn("Could not list models, using default:", e);
     }
 
-    return "gemini-1.5-flash";
+    return "gemini-3.8-flash";
 }
 
 // Format conversation history to strictly comply with Gemini API requirements:
@@ -255,10 +258,9 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
 
         const dynamicModel = await getAvailableModel(apiKey);
         const modelsToTry = [
+            "gemini-3.8-flash",
+            "gemini-2.5-flash",
             dynamicModel,
-            "gemini-1.5-flash",
-            "gemini-1.5-flash-latest",
-            "gemini-2.0-flash",
         ].filter((m, i, arr) => m && arr.indexOf(m) === i);
 
         let text = null;
