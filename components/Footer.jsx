@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import GoogleTranslate from './GoogleTranslate';
-import ZohoFeedbackModal from './ZohoFeedbackModal';
 import { Heart, ExternalLink } from 'lucide-react';
 
 const Footer = () => {
@@ -88,7 +87,6 @@ const Footer = () => {
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 order-1 sm:order-2">
-                        <ZohoFeedbackModal buttonOnly={true} />
                         <GoogleTranslate />
                     </div>
                 </div>
