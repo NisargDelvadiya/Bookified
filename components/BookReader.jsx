@@ -94,7 +94,6 @@ const BookReader = ({ book }) => {
         stop,
         clearError,
         limitError,
-        maxDurationSeconds,
     } = useVapi(book, selectedVoice, messages, addMessage);
 
     // Text input state
@@ -236,8 +235,12 @@ const BookReader = ({ book }) => {
     };
 
     const formatDuration = (seconds) => {
-        const mins = Math.floor(seconds / 60);
+        const hrs = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
         const secs = seconds % 60;
+        if (hrs > 0) {
+            return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
@@ -355,9 +358,9 @@ const BookReader = ({ book }) => {
                             </select>
                         </div>
 
-                        <div className="vapi-status-indicator">
-                            <span className="vapi-status-text">
-                                {formatDuration(duration)}/{formatDuration(maxDurationSeconds)}
+                        <div className="vapi-status-indicator" title="Call duration (Unlimited)">
+                            <span className="vapi-status-text font-mono">
+                                {formatDuration(duration)}
                             </span>
                         </div>
                     </div>

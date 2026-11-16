@@ -68,8 +68,6 @@ export function useVapi(book, customVoice = null, externalMessages = null, onAdd
     const sessionIdRef = useRef(null);
     const isStoppingRef = useRef(false);
 
-    const maxDurationSeconds = 60 * 60; // 60 minutes, unlimited
-    const maxDurationRef = useLatestRef(maxDurationSeconds);
     const durationRef = useLatestRef(duration);
     const messagesRef = useLatestRef(messages);
     const voice = customVoice || book?.persona || DEFAULT_VOICE;
@@ -114,15 +112,6 @@ export function useVapi(book, customVoice = null, externalMessages = null, onAdd
                     if (startTimeRef.current) {
                         const newDuration = Math.floor((Date.now() - startTimeRef.current) / TIMER_INTERVAL_MS);
                         setDuration(newDuration);
-
-                        if (newDuration >= maxDurationRef.current) {
-                            instance.stop();
-                            setLimitError(
-                                `Session time limit (${Math.floor(
-                                    maxDurationRef.current / SECONDS_PER_MINUTE,
-                                )} minutes) reached. Please start a new session.`,
-                            );
-                        }
                     }
                 }, TIMER_INTERVAL_MS);
             },
@@ -354,7 +343,6 @@ export function useVapi(book, customVoice = null, externalMessages = null, onAdd
         start,
         stop,
         limitError,
-        maxDurationSeconds,
         clearError,
     };
 }
