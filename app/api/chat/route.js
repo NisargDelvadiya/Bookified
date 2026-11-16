@@ -5,6 +5,7 @@ import BookSegment from "@/database/models/book-segment.model";
 import ChatConversation from "@/database/models/chat-conversation.model";
 import mongoose from "mongoose";
 import { escapeRegex } from "@/lib/utils";
+import { searchBookSegments } from "@/lib/actions/book.actions";
 
 let cachedModel = null;
 let lastModelCheck = 0;
@@ -92,45 +93,15 @@ function formatGeminiContents(history = [], currentMessage = "") {
     }));
 }
 
-// Search book segments for relevant context
+// Search book segments for relevant context using Vector & Semantic Search
 async function getBookContext(bookId, query) {
     try {
-        await connectToDatabase();
-
-        if (!bookId || !mongoose.Types.ObjectId.isValid(bookId)) return "";
-
-        const bookObjectId = new mongoose.Types.ObjectId(bookId);
-        let segments = [];
-
-        try {
-            segments = await BookSegment.find({
-                bookId: bookObjectId,
-                $text: { $search: query },
-            })
-                .select("content")
-                .sort({ score: { $meta: "textScore" } })
-                .limit(2)
-                .lean();
-        } catch {
-            segments = [];
+        if (!bookId) return "";
+        const result = await searchBookSegments(bookId, query, 3);
+        if (result.success && result.data && result.data.length > 0) {
+            return result.data.map((s) => s.content).join("\n\n---\n\n");
         }
-
-        if (segments.length === 0) {
-            const keywords = query.split(/\s+/).filter((k) => k.length > 2);
-            const pattern = keywords.map(escapeRegex).join("|");
-            if (pattern) {
-                segments = await BookSegment.find({
-                    bookId: bookObjectId,
-                    content: { $regex: pattern, $options: "i" },
-                })
-                    .select("content")
-                    .sort({ segmentIndex: 1 })
-                    .limit(2)
-                    .lean();
-            }
-        }
-
-        return segments.map((s) => s.content).join("\n\n---\n\n");
+        return "";
     } catch (e) {
         console.error("Error fetching book context:", e);
         return "";
