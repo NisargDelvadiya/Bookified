@@ -100,7 +100,7 @@ const BookReader = ({ book }) => {
     // Text input state
     const [input, setInput] = useState("");
     const [isTextLoading, setIsTextLoading] = useState(false);
-    const bottomRef = useRef(null);
+    const chatContainerRef = useRef(null);
     const inputRef = useRef(null);
 
     // Sync with unified database conversation on mount
@@ -140,9 +140,14 @@ const BookReader = ({ book }) => {
         }
     }, [limitError, router, clearError]);
 
-    // Auto-scroll on new messages
+    // Auto-scroll ONLY inside the chat container so the webpage/window does NOT scroll down
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
     }, [messages, isTextLoading, currentMessage, currentUserMessage]);
 
     // Send text message (Gemini)
@@ -197,7 +202,7 @@ const BookReader = ({ book }) => {
             });
         } finally {
             setIsTextLoading(false);
-            inputRef.current?.focus();
+            inputRef.current?.focus({ preventScroll: true });
         }
     };
 
@@ -378,7 +383,10 @@ const BookReader = ({ book }) => {
                     </span>
                 </div>
 
-                <div className="flex flex-col gap-4 min-h-[360px] max-h-[540px] overflow-y-auto px-1 py-2 scroll-smooth">
+                <div
+                    ref={chatContainerRef}
+                    className="flex flex-col gap-4 min-h-[360px] max-h-[540px] overflow-y-auto px-1 py-2 scroll-smooth"
+                >
                     {messages.map((msg, i) => (
                         <div
                             key={i}
@@ -473,8 +481,6 @@ const BookReader = ({ book }) => {
                             </div>
                         </div>
                     )}
-
-                    <div ref={bottomRef} />
                 </div>
 
                 {/* Bottom Input Bar */}

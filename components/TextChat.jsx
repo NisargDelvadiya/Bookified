@@ -7,11 +7,16 @@ import { Send, Bot, User, Loader2, RotateCcw, Mic } from "lucide-react";
 const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) => {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const bottomRef = useRef(null);
+    const chatContainerRef = useRef(null);
     const inputRef = useRef(null);
 
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
     }, [messages, isLoading]);
 
     const sendMessage = async (e) => {
@@ -73,7 +78,7 @@ const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) =>
             }
         } finally {
             setIsLoading(false);
-            inputRef.current?.focus();
+            inputRef.current?.focus({ preventScroll: true });
         }
     };
 
@@ -136,7 +141,10 @@ const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) =>
             </div>
 
             {/* Messages */}
-            <div className="flex flex-col gap-3 min-h-[400px] max-h-[520px] overflow-y-auto px-1 py-2 scroll-smooth">
+            <div
+                ref={chatContainerRef}
+                className="flex flex-col gap-3 min-h-[400px] max-h-[520px] overflow-y-auto px-1 py-2 scroll-smooth"
+            >
                 {messages.map((msg, i) => (
                     <div
                         key={i}
@@ -195,8 +203,6 @@ const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) =>
                         </div>
                     </div>
                 )}
-
-                <div ref={bottomRef} />
             </div>
 
             {/* Input */}
