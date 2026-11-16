@@ -23,7 +23,7 @@ async function getBookContext(bookId, query) {
             })
                 .select("content")
                 .sort({ score: { $meta: "textScore" } })
-                .limit(4)
+                .limit(2)
                 .lean();
         } catch {
             segments = [];
@@ -39,7 +39,7 @@ async function getBookContext(bookId, query) {
                 })
                     .select("content")
                     .sort({ segmentIndex: 1 })
-                    .limit(4)
+                    .limit(2)
                     .lean();
             }
         }
@@ -138,11 +138,11 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
             { role: "user", parts: [{ text: message }] },
         ];
 
-        // Try latest models with automatic fallback
+        // gemini-1.5-flash is Google's fastest production model with sub-second response times
         const modelsToTry = [
-            "gemini-3.8-flash",
-            "gemini-2.5-flash",
             "gemini-1.5-flash",
+            "gemini-1.5-flash-latest",
+            "gemini-1.5-pro",
         ];
 
         let text = null;
@@ -160,8 +160,8 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                             contents,
                             generationConfig: {
                                 temperature: 0.7,
-                                maxOutputTokens: 1024,
-                                topP: 0.9,
+                                maxOutputTokens: 600,
+                                topP: 0.85,
                             },
                         }),
                     }
