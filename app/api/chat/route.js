@@ -217,11 +217,11 @@ export async function POST(request) {
 ${isContinuing ? "You are continuing an ongoing conversation with the reader. Seamlessly pick up from where you left off based on the conversation history." : ""}
 
 Guidelines:
-- Answer questions about the book's themes, characters, plot, arguments, and ideas
+- Answer questions directly about the book's themes, characters, plot, arguments, and ideas
 - Reference specific passages or ideas from the book when relevant
 - Be conversational and engaging, not robotic
-- Always finish your sentences and provide complete, well-rounded answers without cutting off mid-thought
-- Keep responses readable and insightful (2-4 paragraphs max)
+- Keep responses focused, insightful, and conversational (1-2 punchy paragraphs, around 100-150 words) so replies arrive instantly
+- Always finish your sentences and provide complete, well-rounded thoughts
 ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${context}` : ""}`;
 
         // Build properly alternating conversation history for Gemini fallback
@@ -253,7 +253,7 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                     input: fullPromptInput,
                     generation_config: {
                         thinking_level: "low",
-                        max_output_tokens: 4096,
+                        max_output_tokens: 1024,
                     },
                 }),
             });
@@ -295,7 +295,7 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                                 contents,
                                 generationConfig: {
                                     temperature: 0.7,
-                                    maxOutputTokens: 4096,
+                                    maxOutputTokens: 1024,
                                     topP: 0.85,
                                 },
                             }),
@@ -325,30 +325,26 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
             );
         }
 
-        // Save both user message and AI response to MongoDB permanently
+        // Save conversation in the background so the HTTP response is returned immediately
         if (bookId && mongoose.Types.ObjectId.isValid(bookId)) {
-            try {
-                await connectToDatabase();
-                await ChatConversation.findOneAndUpdate(
-                    {
-                        clerkId: userId,
-                        bookId: new mongoose.Types.ObjectId(bookId),
-                    },
-                    {
-                        $push: {
-                            messages: {
-                                $each: [
-                                    { role: "user", content: message, mode: "text" },
-                                    { role: "assistant", content: text, mode: "text" },
-                                ],
+            connectToDatabase()
+                .then(() =>
+                    ChatConversation.findOneAndUpdate(
+                        { clerkId: userId, bookId: new mongoose.Types.ObjectId(bookId) },
+                        {
+                            $push: {
+                                messages: {
+                                    $each: [
+                                        { role: "user", content: message, mode: "text" },
+                                        { role: "assistant", content: text, mode: "text" },
+                                    ],
+                                },
                             },
                         },
-                    },
-                    { upsert: true, new: true }
-                );
-            } catch (dbErr) {
-                console.warn("Could not persist chat message to DB:", dbErr);
-            }
+                        { upsert: true, new: true }
+                    )
+                )
+                .catch((dbErr) => console.warn("Background chat persistence error:", dbErr));
         }
 
         return NextResponse.json({ response: text });
