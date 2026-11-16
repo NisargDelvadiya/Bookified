@@ -25,21 +25,16 @@ const VapiControls = ({ book }) => {
         stop,
         clearError,
         limitError,
-        isBillingError,
         maxDurationSeconds,
     } = useVapi(book, selectedVoice);
 
     useEffect(() => {
         if (limitError) {
             toast.error(limitError);
-            if (isBillingError) {
-                router.push("/subscriptions");
-            } else {
-                router.push("/");
-            }
+            router.push("/");
             clearError();
         }
-    }, [isBillingError, limitError, router, clearError]);
+    }, [limitError, router, clearError]);
 
     const formatDuration = (seconds) => {
         const mins = Math.floor(seconds / 60);

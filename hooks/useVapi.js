@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Vapi from '@vapi-ai/web';
 import { useAuth } from '@clerk/nextjs';
 
-import { useSubscription } from '@/hooks/useSubscription';
 import { ASSISTANT_ID, DEFAULT_VOICE, VOICE_SETTINGS } from '@/lib/constants';
 import { getVoice } from '@/lib/utils';
 import { startVoiceSession, endVoiceSession } from '@/lib/actions/session.actions';
@@ -39,7 +38,6 @@ function getVapi() {
 
 export function useVapi(book, customVoice = null) {
     const { userId } = useAuth();
-    const { limits } = useSubscription();
 
     const [status, setStatus] = useState('idle');
     const [messages, setMessages] = useState([]);
@@ -47,14 +45,13 @@ export function useVapi(book, customVoice = null) {
     const [currentUserMessage, setCurrentUserMessage] = useState('');
     const [duration, setDuration] = useState(0);
     const [limitError, setLimitError] = useState(null);
-    const [isBillingError, setIsBillingError] = useState(false);
 
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
     const sessionIdRef = useRef(null);
     const isStoppingRef = useRef(false);
 
-    const maxDurationSeconds = limits?.maxDurationPerSession ? limits.maxDurationPerSession * 60 : (15 * 60);
+    const maxDurationSeconds = 60 * 60; // 60 minutes, unlimited
     const maxDurationRef = useLatestRef(maxDurationSeconds);
     const durationRef = useLatestRef(duration);
     const messagesRef = useLatestRef(messages);
@@ -83,7 +80,7 @@ export function useVapi(book, customVoice = null) {
                             setLimitError(
                                 `Session time limit (${Math.floor(
                                     maxDurationRef.current / SECONDS_PER_MINUTE,
-                                )} minutes) reached. Upgrade your plan for longer sessions.`,
+                                )} minutes) reached. Please start a new session.`,
                             );
                         }
                     }
@@ -241,8 +238,7 @@ export function useVapi(book, customVoice = null) {
             const result = await startVoiceSession(userId, book._id);
 
             if (!result.success) {
-                setLimitError(result.error || 'Session limit reached. Please upgrade your plan.');
-                setIsBillingError(!!result.isBillingError);
+                setLimitError(result.error || 'Failed to start session. Please try again.');
                 setStatus('idle');
                 return;
             }
@@ -283,7 +279,6 @@ export function useVapi(book, customVoice = null) {
 
     const clearError = useCallback(() => {
         setLimitError(null);
-        setIsBillingError(false);
     }, []);
 
     const isActive =
@@ -302,7 +297,6 @@ export function useVapi(book, customVoice = null) {
         start,
         stop,
         limitError,
-        isBillingError,
         maxDurationSeconds,
         clearError,
     };

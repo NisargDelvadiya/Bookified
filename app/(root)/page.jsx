@@ -1,4 +1,5 @@
 import React from 'react';
+import { auth } from "@clerk/nextjs/server";
 import HeroSection from "@/components/HeroSection";
 import BookCard from "@/components/BookCard";
 import { getAllBooks } from "@/lib/actions/book.actions";
@@ -8,6 +9,7 @@ const Page = async ({ searchParams }) => {
     const params = await searchParams;
     const query = params?.query;
 
+    const { userId } = await auth();
     const bookResults = await getAllBooks(query);
     const books = bookResults?.success ? bookResults.data ?? [] : [];
 
@@ -25,10 +27,13 @@ const Page = async ({ searchParams }) => {
                     {books.map((book) => (
                         <BookCard
                             key={book._id}
+                            _id={book._id}
                             title={book.title}
                             author={book.author}
                             coverURL={book.coverURL}
                             slug={book.slug}
+                            clerkId={book.clerkId}
+                            currentUserId={userId}
                         />
                     ))}
                 </div>

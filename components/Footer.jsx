@@ -7,14 +7,6 @@ import GoogleTranslate from './GoogleTranslate';
 import ZohoFeedbackModal from './ZohoFeedbackModal';
 import { Heart, ExternalLink } from 'lucide-react';
 
-const donationCauses = [
-    {
-        name: 'Hindu Fund',
-        subtitle: 'Preserving Heritage & Dharma',
-        url: 'https://hindu.fund/',
-    },
-];
-
 const Footer = () => {
     return (
         <footer
@@ -25,7 +17,7 @@ const Footer = () => {
             <div className="wrapper py-14">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-start">
                     {/* 1. Brand & Mission */}
-                    <div className="space-y-4 sm:col-span-2 lg:col-span-1 xl:col-span-6">
+                    <div className="space-y-4 sm:col-span-2 lg:col-span-1 xl:col-span-8">
                         <Link href="https://bookified-now.vercel.app" className="flex gap-2.5 items-center w-fit" aria-label="Bookified Home">
                             <Image
                                 src="/assets/logo-white-hd.png"
@@ -42,7 +34,7 @@ const Footer = () => {
                     </div>
 
                     {/* 2. Legal */}
-                    <div className="space-y-4 xl:col-span-3">
+                    <div className="space-y-4 xl:col-span-4">
                         <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
                             Legal
                         </h4>
@@ -69,29 +61,6 @@ const Footer = () => {
                                     <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />
                                 </Link>
                             </li>
-                        </ul>
-                    </div>
-
-                    {/* 3. Donations */}
-                    <div className="space-y-4 xl:col-span-3">
-                        <h4 className="text-base font-semibold text-white tracking-wider uppercase text-xs">
-                            Donations
-                        </h4>
-                        <ul className="space-y-2.5 flex flex-col">
-                            {donationCauses.map((cause) => (
-                                <li key={cause.name}>
-                                    <a
-                                        href={cause.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        title={cause.subtitle}
-                                        className="group inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors"
-                                    >
-                                        <span className="group-hover:underline underline-offset-4">{cause.name}</span>
-                                        <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />
-                                    </a>
-                                </li>
-                            ))}
                         </ul>
                     </div>
                 </div>
