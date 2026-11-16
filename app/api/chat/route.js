@@ -200,10 +200,15 @@ export async function POST(request) {
             return NextResponse.json({ error: "Message is required" }, { status: 400 });
         }
 
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
+        const rawKey = process.env.GEMINI_API_KEY || "";
+        const apiKeys = rawKey
+            .split(",")
+            .map((k) => k.trim())
+            .filter((k) => k && !k.includes("..."));
+
+        if (!apiKeys.length) {
             return NextResponse.json(
-                { error: "GEMINI_API_KEY is not configured. Add it to your .env.local file." },
+                { error: "GEMINI_API_KEY is not configured. Please add a valid Gemini key to your .env.local file or Vercel settings." },
                 { status: 500 }
             );
         }
@@ -230,7 +235,7 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
         let text = null;
         let lastError = null;
 
-        // 1. Primary: Use Google's recommended Interactions API with gemini-3.8-flash
+        // 1. Primary: Use Google's recommended Interactions API with gemini-3.8-flash (with multi-key rotation)
         const conversationTranscript = history
             .filter((h) => h.content && !h.content.startsWith("Hi! I've read"))
             .map((h) => `${h.role === "assistant" || h.role === "model" ? "Assistant" : "Reader"}: ${h.content}`)
@@ -240,81 +245,95 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
             ? `Prior conversation history:\n${conversationTranscript}\n\nReader's latest message: ${message}`
             : message;
 
-        try {
-            const interactionsRes = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-goog-api-key": apiKey,
-                },
-                body: JSON.stringify({
-                    model: "gemini-3.8-flash",
-                    system_instruction: systemPrompt,
-                    input: fullPromptInput,
-                    generation_config: {
-                        thinking_level: "low",
-                        max_output_tokens: 1024,
+        for (const apiKey of apiKeys) {
+            try {
+                const interactionsRes = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": apiKey,
                     },
-                }),
-            });
+                    body: JSON.stringify({
+                        model: "gemini-3.8-flash",
+                        system_instruction: systemPrompt,
+                        input: fullPromptInput,
+                        generation_config: {
+                            thinking_level: "low",
+                            max_output_tokens: 1024,
+                        },
+                    }),
+                });
 
-            if (interactionsRes.ok) {
-                const data = await interactionsRes.json();
-                text =
-                    data.output_text ||
-                    data.outputs?.[0]?.text ||
-                    data.steps?.find((s) => s.text)?.text ||
-                    data.candidates?.[0]?.content?.parts?.[0]?.text;
-            } else {
-                const err = await interactionsRes.json();
-                lastError = err?.error?.message || "Interactions API request failed";
-                console.error("Interactions API error with gemini-3.8-flash:", err);
+                if (interactionsRes.ok) {
+                    const data = await interactionsRes.json();
+                    text =
+                        data.output_text ||
+                        data.outputs?.[0]?.text ||
+                        data.steps?.find((s) => s.text)?.text ||
+                        data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) break;
+                } else {
+                    const err = await interactionsRes.json();
+                    lastError = err?.error?.message || "Interactions API request failed";
+                    console.error("Interactions API error with key:", err);
+                    if (interactionsRes.status === 429) {
+                        // Rate/Quota limit exceeded on this key, try next key!
+                        console.warn("Quota exceeded on current key, rotating to next key...");
+                        continue;
+                    }
+                }
+            } catch (fetchErr) {
+                lastError = fetchErr.message;
+                console.error("Interactions API exception with key:", fetchErr);
             }
-        } catch (fetchErr) {
-            lastError = fetchErr.message;
-            console.error("Interactions API exception with gemini-3.8-flash:", fetchErr);
         }
 
         // 2. Secondary fallback: generateContent endpoint with active model
         if (!text) {
-            const dynamicModel = await getAvailableModel(apiKey);
+            const dynamicModel = await getAvailableModel(apiKeys[0]);
             const modelsToTry = [
                 "gemini-3.8-flash",
                 dynamicModel,
             ].filter((m, i, arr) => m && arr.indexOf(m) === i);
 
-            for (const modelName of modelsToTry) {
-                try {
-                    const geminiResponse = await fetch(
-                        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                system_instruction: { parts: [{ text: systemPrompt }] },
-                                contents,
-                                generationConfig: {
-                                    temperature: 0.7,
-                                    maxOutputTokens: 1024,
-                                    topP: 0.85,
-                                },
-                            }),
-                        }
-                    );
+            for (const apiKey of apiKeys) {
+                for (const modelName of modelsToTry) {
+                    try {
+                        const geminiResponse = await fetch(
+                            `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
+                            {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    system_instruction: { parts: [{ text: systemPrompt }] },
+                                    contents,
+                                    generationConfig: {
+                                        temperature: 0.7,
+                                        maxOutputTokens: 1024,
+                                        topP: 0.85,
+                                    },
+                                }),
+                            }
+                        );
 
-                    if (geminiResponse.ok) {
-                        const data = await geminiResponse.json();
-                        text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (text) break;
-                    } else {
-                        const err = await geminiResponse.json();
-                        lastError = err?.error?.message || `Model ${modelName} request failed`;
-                        console.error(`Gemini API error with ${modelName}:`, err);
+                        if (geminiResponse.ok) {
+                            const data = await geminiResponse.json();
+                            text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                            if (text) break;
+                        } else {
+                            const err = await geminiResponse.json();
+                            lastError = err?.error?.message || `Model ${modelName} request failed`;
+                            console.error(`Gemini API error with ${modelName}:`, err);
+                            if (geminiResponse.status === 429) {
+                                break; // try next key
+                            }
+                        }
+                    } catch (fetchErr) {
+                        lastError = fetchErr.message;
+                        console.error(`Fetch exception with ${modelName}:`, fetchErr);
                     }
-                } catch (fetchErr) {
-                    lastError = fetchErr.message;
-                    console.error(`Fetch exception with ${modelName}:`, fetchErr);
                 }
+                if (text) break;
             }
         }
 
