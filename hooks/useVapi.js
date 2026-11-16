@@ -300,15 +300,6 @@ export function useVapi(book, customVoice = null, externalMessages = null, onAdd
                     bookId: book._id,
                     previousDiscussion: previousContext || "No prior discussion yet.",
                 },
-                voice: {
-                    provider: '11labs',
-                    voiceId: getVoice(voice).id,
-                    model: 'eleven_turbo_v2_5',
-                    stability: VOICE_SETTINGS.stability,
-                    similarityBoost: VOICE_SETTINGS.similarityBoost,
-                    style: VOICE_SETTINGS.style,
-                    useSpeakerBoost: VOICE_SETTINGS.useSpeakerBoost,
-                },
             });
         } catch (err) {
             console.error('Failed to start call:', err);
