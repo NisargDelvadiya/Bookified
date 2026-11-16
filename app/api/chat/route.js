@@ -6,6 +6,43 @@ import ChatConversation from "@/database/models/chat-conversation.model";
 import mongoose from "mongoose";
 import { escapeRegex } from "@/lib/utils";
 
+let cachedModel = null;
+let lastModelCheck = 0;
+
+// Query Google ModelService.ListModels dynamically to select an active model supported by the API key
+async function getAvailableModel(apiKey) {
+    const now = Date.now();
+    if (cachedModel && now - lastModelCheck < 10 * 60 * 1000) {
+        return cachedModel;
+    }
+
+    try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+        if (res.ok) {
+            const data = await res.json();
+            const models = (data.models || [])
+                .filter((m) => m.supportedGenerationMethods?.includes("generateContent"))
+                .map((m) => m.name.replace(/^models\//, ""));
+
+            const chosen =
+                models.find((m) => m.includes("flash") && !m.includes("8b") && !m.includes("preview")) ||
+                models.find((m) => m.includes("flash")) ||
+                models.find((m) => m.includes("gemini")) ||
+                models[0];
+
+            if (chosen) {
+                cachedModel = chosen;
+                lastModelCheck = now;
+                return chosen;
+            }
+        }
+    } catch (e) {
+        console.warn("Could not list models, using default:", e);
+    }
+
+    return "gemini-1.5-flash";
+}
+
 // Search book segments for relevant context
 async function getBookContext(bookId, query) {
     try {
@@ -90,6 +127,45 @@ export async function GET(request) {
     }
 }
 
+// DELETE: Clear conversation for this book and user
+export async function DELETE(request) {
+    try {
+        const { userId } = await auth();
+        if (!userId) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const { searchParams } = new URL(request.url);
+        const bookId = searchParams.get("bookId");
+
+        if (!bookId || !mongoose.Types.ObjectId.isValid(bookId)) {
+            return NextResponse.json({ error: "Invalid book ID" }, { status: 400 });
+        }
+
+        await connectToDatabase();
+        await ChatConversation.findOneAndDelete({
+            clerkId: userId,
+            bookId: new mongoose.Types.ObjectId(bookId),
+        });
+
+        // Also clean up old legacy voice session transcripts for this book
+        try {
+            const VoiceSession = (await import("@/database/models/voice-session.model")).default;
+            await VoiceSession.deleteMany({
+                clerkId: userId,
+                bookId: new mongoose.Types.ObjectId(bookId),
+            });
+        } catch (vErr) {
+            console.warn("Could not delete legacy voice sessions:", vErr);
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (e) {
+        console.error("Error deleting conversation:", e);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
+}
+
 // POST: Send new message, get AI response, and save to conversation
 export async function POST(request) {
     try {
@@ -138,12 +214,14 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
             { role: "user", parts: [{ text: message }] },
         ];
 
-        // gemini-1.5-flash is Google's fastest production model with sub-second response times
+        // Dynamically get the best available model supported by this API key
+        const detectedModel = await getAvailableModel(apiKey);
         const modelsToTry = [
+            detectedModel,
             "gemini-1.5-flash",
-            "gemini-1.5-flash-latest",
+            "gemini-2.5-flash",
             "gemini-1.5-pro",
-        ];
+        ].filter((val, idx, arr) => arr.indexOf(val) === idx);
 
         let text = null;
         let lastError = null;
