@@ -102,6 +102,21 @@ export default function RootLayout({ children }) {
           <body
             className={`${ibmPlexSerif.variable} ${monaSans.variable} relative min-h-screen flex flex-col justify-between font-sans antialiased`}
           >
+            {/* Website Blurry Background */}
+            <div
+              aria-hidden="true"
+              className="fixed -inset-6 pointer-events-none -z-10 bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: "url('/bg.jpg')",
+                filter: "blur(14px)",
+                opacity: 0.55,
+              }}
+            />
+            {/* Subtle warm tint overlay to ensure text readability */}
+            <div
+              aria-hidden="true"
+              className="fixed inset-0 pointer-events-none -z-10 bg-[#f8f4e9]/35"
+            />
             <a
               href="#main-content"
               className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#212a3b] focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none"

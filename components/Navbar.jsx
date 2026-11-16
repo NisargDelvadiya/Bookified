@@ -45,7 +45,7 @@ const Navbar = () => {
             role="banner"
             aria-label="Site Header"
             className={cn(
-                "w-full fixed top-0 left-0 right-0 z-50 bg-(--bg-primary) transition-transform duration-300 ease-in-out",
+                "w-full fixed top-0 left-0 right-0 z-50 bg-(--bg-primary)/85 backdrop-blur-md transition-transform duration-300 ease-in-out border-b border-[#212a3b]/5",
                 isVisible ? "translate-y-0" : "-translate-y-full"
             )}
         >
