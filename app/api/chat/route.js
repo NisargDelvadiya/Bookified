@@ -93,36 +93,55 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
             { role: "user", parts: [{ text: message }] },
         ];
 
-        const geminiResponse = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    system_instruction: { parts: [{ text: systemPrompt }] },
-                    contents,
-                    generationConfig: {
-                        temperature: 0.7,
-                        maxOutputTokens: 1024,
-                        topP: 0.9,
-                    },
-                }),
-            }
-        );
+        // Try latest models with automatic fallback
+        const modelsToTry = [
+            "gemini-3.8-flash",
+            "gemini-2.5-flash",
+            "gemini-1.5-flash",
+        ];
 
-        if (!geminiResponse.ok) {
-            const err = await geminiResponse.json();
-            console.error("Gemini API error:", err);
+        let text = null;
+        let lastError = null;
+
+        for (const modelName of modelsToTry) {
+            try {
+                const geminiResponse = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            system_instruction: { parts: [{ text: systemPrompt }] },
+                            contents,
+                            generationConfig: {
+                                temperature: 0.7,
+                                maxOutputTokens: 1024,
+                                topP: 0.9,
+                            },
+                        }),
+                    }
+                );
+
+                if (geminiResponse.ok) {
+                    const data = await geminiResponse.json();
+                    text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) break;
+                } else {
+                    const err = await geminiResponse.json();
+                    lastError = err?.error?.message || `Model ${modelName} request failed`;
+                    console.warn(`Failed with ${modelName}:`, lastError);
+                }
+            } catch (fetchErr) {
+                lastError = fetchErr.message;
+            }
+        }
+
+        if (!text) {
             return NextResponse.json(
-                { error: err?.error?.message || "Failed to get AI response" },
+                { error: lastError || "Failed to generate AI response" },
                 { status: 502 }
             );
         }
-
-        const data = await geminiResponse.json();
-        const text =
-            data.candidates?.[0]?.content?.parts?.[0]?.text ||
-            "I'm sorry, I couldn't generate a response. Please try again.";
 
         return NextResponse.json({ response: text });
     } catch (e) {
