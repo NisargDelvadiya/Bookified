@@ -6,7 +6,7 @@ import { useAuth } from '@clerk/nextjs';
 
 import { ASSISTANT_ID, DEFAULT_VOICE, VOICE_SETTINGS } from '@/lib/constants';
 import { getVoice } from '@/lib/utils';
-import { startVoiceSession, endVoiceSession } from '@/lib/actions/session.actions';
+import { startVoiceSession, endVoiceSession, getBookVoiceHistory } from '@/lib/actions/session.actions';
 
 export function useLatestRef(value) {
     const ref = useRef(value);
@@ -38,13 +38,61 @@ function getVapi() {
 
 export function useVapi(book, customVoice = null) {
     const { userId } = useAuth();
+    const storageKey = `bookified_voice_transcript_${book?._id}`;
 
     const [status, setStatus] = useState('idle');
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+        if (typeof window !== "undefined" && book?._id) {
+            try {
+                const cached = localStorage.getItem(storageKey);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.warn("Failed to load cached voice transcript:", e);
+            }
+        }
+        return [];
+    });
     const [currentMessage, setCurrentMessage] = useState('');
     const [currentUserMessage, setCurrentUserMessage] = useState('');
     const [duration, setDuration] = useState(0);
     const [limitError, setLimitError] = useState(null);
+
+    // Sync voice history from database on mount
+    useEffect(() => {
+        if (!book?._id) return;
+        let isMounted = true;
+
+        getBookVoiceHistory(book._id)
+            .then((res) => {
+                if (isMounted && res.success && res.messages && res.messages.length > 0) {
+                    setMessages(res.messages);
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify(res.messages));
+                    } catch (e) {
+                        console.warn("Failed to cache voice transcript:", e);
+                    }
+                }
+            })
+            .catch((err) => console.warn("Failed to load voice history:", err));
+
+        return () => {
+            isMounted = false;
+        };
+    }, [book?._id, storageKey]);
+
+    // Save transcript to localStorage whenever messages change
+    useEffect(() => {
+        if (typeof window !== "undefined" && book?._id && messages.length > 0) {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(messages));
+            } catch (e) {
+                console.warn("Failed to save transcript to localStorage:", e);
+            }
+        }
+    }, [messages, book?._id, storageKey]);
 
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
@@ -231,7 +279,6 @@ export function useVapi(book, customVoice = null) {
         }
 
         setLimitError(null);
-        setIsBillingError(false);
         setStatus('connecting');
 
         try {
@@ -245,7 +292,17 @@ export function useVapi(book, customVoice = null) {
 
             sessionIdRef.current = result.sessionId || null;
 
-            const firstMessage = `Hey, good to meet you. Quick question before we dive in - have you actually read ${book.title} yet, or are we starting fresh?`;
+            const previousMessages = messagesRef.current || [];
+            const isContinuing = previousMessages.length > 0;
+
+            const firstMessage = isContinuing
+                ? `Welcome back! Ready to continue our conversation about "${book.title}" from where we left off?`
+                : `Hey, good to meet you. Quick question before we dive in - have you actually read ${book.title} yet, or are we starting fresh?`;
+
+            const previousContext = previousMessages
+                .slice(-6)
+                .map((m) => `${m.role === 'user' ? 'Reader' : 'Assistant'}: ${m.content}`)
+                .join("\n");
 
             await instance.start(ASSISTANT_ID, {
                 firstMessage,
@@ -253,6 +310,7 @@ export function useVapi(book, customVoice = null) {
                     title: book.title,
                     author: book.author,
                     bookId: book._id,
+                    previousDiscussion: previousContext || "No prior discussion yet.",
                 },
                 voice: {
                     provider: '11labs',

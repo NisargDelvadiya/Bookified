@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { connectToDatabase } from "@/database/mongoose";
 import BookSegment from "@/database/models/book-segment.model";
+import ChatConversation from "@/database/models/chat-conversation.model";
 import mongoose from "mongoose";
 import { escapeRegex } from "@/lib/utils";
 
-// Search book segments for relevant context (server-side, not a server action import)
+// Search book segments for relevant context
 async function getBookContext(bookId, query) {
     try {
         await connectToDatabase();
@@ -50,6 +51,44 @@ async function getBookContext(bookId, query) {
     }
 }
 
+// GET: Load saved conversation for this book and user
+export async function GET(request) {
+    try {
+        const { userId } = await auth();
+        if (!userId) {
+            return NextResponse.json({ messages: [] });
+        }
+
+        const { searchParams } = new URL(request.url);
+        const bookId = searchParams.get("bookId");
+
+        if (!bookId || !mongoose.Types.ObjectId.isValid(bookId)) {
+            return NextResponse.json({ messages: [] });
+        }
+
+        await connectToDatabase();
+        const conversation = await ChatConversation.findOne({
+            clerkId: userId,
+            bookId: new mongoose.Types.ObjectId(bookId),
+        }).lean();
+
+        if (!conversation || !conversation.messages) {
+            return NextResponse.json({ messages: [] });
+        }
+
+        return NextResponse.json({
+            messages: conversation.messages.map((m) => ({
+                role: m.role,
+                content: m.content,
+            })),
+        });
+    } catch (e) {
+        console.error("Error loading chat conversation:", e);
+        return NextResponse.json({ messages: [] });
+    }
+}
+
+// POST: Send new message, get AI response, and save to conversation
 export async function POST(request) {
     try {
         const { userId } = await auth();
@@ -74,7 +113,10 @@ export async function POST(request) {
         // Fetch relevant book context
         const context = await getBookContext(bookId, message);
 
-        const systemPrompt = `You are a knowledgeable and engaging AI reading companion who has thoroughly read the book "${bookTitle}" by ${bookAuthor}. Your role is to have intelligent, thoughtful conversations about this book with the reader.
+        const isContinuing = history.length > 0;
+
+        const systemPrompt = `You are a knowledgeable, thoughtful, and engaging AI reading companion who has thoroughly read the book "${bookTitle}" by ${bookAuthor}.
+${isContinuing ? "You are continuing an ongoing conversation with the reader. Seamlessly pick up from where you left off based on the conversation history." : ""}
 
 Guidelines:
 - Answer questions about the book's themes, characters, plot, arguments, and ideas
@@ -84,9 +126,10 @@ Guidelines:
 - Keep responses concise but insightful (2-4 paragraphs max)
 ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${context}` : ""}`;
 
-        // Build conversation history for Gemini
+        // Build conversation history for Gemini (last 16 messages for context window management)
+        const recentHistory = history.slice(-16);
         const contents = [
-            ...history.map((h) => ({
+            ...recentHistory.map((h) => ({
                 role: h.role === "assistant" ? "model" : "user",
                 parts: [{ text: h.content }],
             })),
@@ -141,6 +184,32 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                 { error: lastError || "Failed to generate AI response" },
                 { status: 502 }
             );
+        }
+
+        // Save both user message and AI response to MongoDB permanently
+        if (bookId && mongoose.Types.ObjectId.isValid(bookId)) {
+            try {
+                await connectToDatabase();
+                await ChatConversation.findOneAndUpdate(
+                    {
+                        clerkId: userId,
+                        bookId: new mongoose.Types.ObjectId(bookId),
+                    },
+                    {
+                        $push: {
+                            messages: {
+                                $each: [
+                                    { role: "user", content: message },
+                                    { role: "assistant", content: text },
+                                ],
+                            },
+                        },
+                    },
+                    { upsert: true, new: true }
+                );
+            } catch (dbErr) {
+                console.warn("Could not persist chat message to DB:", dbErr);
+            }
         }
 
         return NextResponse.json({ response: text });
