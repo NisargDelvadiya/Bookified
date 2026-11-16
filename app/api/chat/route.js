@@ -80,6 +80,8 @@ export async function GET(request) {
             messages: conversation.messages.map((m) => ({
                 role: m.role,
                 content: m.content,
+                mode: m.mode || 'text',
+                createdAt: m.createdAt,
             })),
         });
     } catch (e) {
@@ -199,8 +201,8 @@ ${context ? `\nRelevant excerpts from the book to inform your response:\n\n${con
                         $push: {
                             messages: {
                                 $each: [
-                                    { role: "user", content: message },
-                                    { role: "assistant", content: text },
+                                    { role: "user", content: message, mode: "text" },
+                                    { role: "assistant", content: text, mode: "text" },
                                 ],
                             },
                         },

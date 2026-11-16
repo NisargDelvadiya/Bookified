@@ -1,80 +1,13 @@
 'use client';
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2, MessageSquare, RotateCcw } from "lucide-react";
+import { Send, Bot, User, Loader2, MessageSquare, RotateCcw, Mic } from "lucide-react";
 
-const TextChat = ({ book }) => {
-    const defaultGreeting = {
-        role: "assistant",
-        content: `Hi! I've read **"${book?.title}"** by ${book?.author}. Ask me anything about it — themes, characters, plot, quotes, or your thoughts on it!`,
-    };
-
-    const storageKey = `bookified_chat_${book?._id}`;
-
-    // Initialize from localStorage if available
-    const [messages, setMessages] = useState(() => {
-        if (typeof window !== "undefined" && book?._id) {
-            try {
-                const cached = localStorage.getItem(storageKey);
-                if (cached) {
-                    const parsed = JSON.parse(cached);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        return parsed;
-                    }
-                }
-            } catch (e) {
-                console.warn("Failed to load cached chat:", e);
-            }
-        }
-        return [defaultGreeting];
-    });
-
+const TextChat = ({ book, messages = [], onAddMessage, onClearConversation }) => {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
-
-    // Sync with server history on mount
-    useEffect(() => {
-        if (!book?._id) return;
-
-        let isMounted = true;
-        fetch(`/api/chat?bookId=${book._id}`)
-            .then((res) => res.json())
-            .then((data) => {
-                if (isMounted && data.messages && data.messages.length > 0) {
-                    setMessages((prev) => {
-                        // Don't overwrite if user has already added messages locally
-                        if (prev.length > data.messages.length + 1) {
-                            return prev;
-                        }
-                        const merged = [defaultGreeting, ...data.messages];
-                        try {
-                            localStorage.setItem(storageKey, JSON.stringify(merged));
-                        } catch (e) {
-                            console.warn("Failed to cache chat:", e);
-                        }
-                        return merged;
-                    });
-                }
-            })
-            .catch((err) => console.warn("Could not load server chat history:", err));
-
-        return () => {
-            isMounted = false;
-        };
-    }, [book?._id, storageKey]);
-
-    // Persist to localStorage whenever messages change
-    useEffect(() => {
-        if (typeof window !== "undefined" && book?._id && messages.length > 1) {
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(messages));
-            } catch (e) {
-                console.warn("Failed to save chat to localStorage:", e);
-            }
-        }
-    }, [messages, book?._id, storageKey]);
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -85,15 +18,18 @@ const TextChat = ({ book }) => {
         const text = input.trim();
         if (!text || isLoading) return;
 
-        const userMessage = { role: "user", content: text };
-        const updatedMessages = [...messages, userMessage];
-        setMessages(updatedMessages);
+        const userMessage = { role: "user", content: text, mode: "text" };
+        if (onAddMessage) {
+            onAddMessage(userMessage);
+        }
         setInput("");
         setIsLoading(true);
 
         try {
-            // Build conversation history (excluding the greeting message)
-            const history = updatedMessages.slice(1);
+            // Send full conversation history (excluding initial greeting) so AI has context of both voice & text
+            const history = messages
+                .filter((m) => m.content && !m.content.startsWith("Hi! I've read"))
+                .map((m) => ({ role: m.role, content: m.content }));
 
             const res = await fetch("/api/chat", {
                 method: "POST",
@@ -103,47 +39,40 @@ const TextChat = ({ book }) => {
                     bookId: book?._id,
                     bookTitle: book?.title,
                     bookAuthor: book?.author,
-                    history,
+                    history: [...history, { role: "user", content: text }],
                 }),
             });
 
             const data = await res.json();
 
             if (!res.ok) {
-                setMessages((prev) => [
-                    ...prev,
-                    { role: "assistant", content: `⚠️ ${data.error || "Something went wrong. Please try again."}` },
-                ]);
+                if (onAddMessage) {
+                    onAddMessage({
+                        role: "assistant",
+                        content: `⚠️ ${data.error || "Something went wrong. Please try again."}`,
+                        mode: "text",
+                    });
+                }
             } else {
-                setMessages((prev) => {
-                    const finalMessages = [...prev, { role: "assistant", content: data.response }];
-                    try {
-                        localStorage.setItem(storageKey, JSON.stringify(finalMessages));
-                    } catch (e) {
-                        console.warn("Failed to cache final chat:", e);
-                    }
-                    return finalMessages;
-                });
+                if (onAddMessage) {
+                    onAddMessage({
+                        role: "assistant",
+                        content: data.response,
+                        mode: "text",
+                    });
+                }
             }
         } catch {
-            setMessages((prev) => [
-                ...prev,
-                { role: "assistant", content: "⚠️ Connection error. Please check your internet and try again." },
-            ]);
+            if (onAddMessage) {
+                onAddMessage({
+                    role: "assistant",
+                    content: "⚠️ Connection error. Please check your internet and try again.",
+                    mode: "text",
+                });
+            }
         } finally {
             setIsLoading(false);
             inputRef.current?.focus();
-        }
-    };
-
-    const handleClearChat = () => {
-        if (confirm("Clear this conversation history?")) {
-            setMessages([defaultGreeting]);
-            try {
-                localStorage.removeItem(storageKey);
-            } catch (e) {
-                console.warn("Failed to clear chat cache:", e);
-            }
         }
     };
 
@@ -179,14 +108,14 @@ const TextChat = ({ book }) => {
                     <div>
                         <h2 className="font-bold text-[#212a3b] text-lg leading-tight">{book?.title}</h2>
                         <p className="text-sm text-[#3d485e]">
-                            Text chat with AI · Saved automatically
+                            Unified conversation · Voice & Text synced
                         </p>
                     </div>
                 </div>
 
-                {messages.length > 1 && (
+                {messages.length > 1 && onClearConversation && (
                     <button
-                        onClick={handleClearChat}
+                        onClick={onClearConversation}
                         title="Clear conversation"
                         className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors px-3 py-1.5 rounded-lg border border-gray-200 hover:border-red-200"
                     >
@@ -220,13 +149,25 @@ const TextChat = ({ book }) => {
 
                         {/* Bubble */}
                         <div
-                            className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                            className={`relative max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                                 msg.role === "user"
                                     ? "bg-[#212a3b] text-white rounded-tr-sm"
                                     : "bg-white border border-gray-100 shadow-sm text-[#212a3b] rounded-tl-sm"
                             }`}
                         >
                             {renderContent(msg.content)}
+
+                            {/* Mode indicator badge if it was from voice */}
+                            {msg.mode === "voice" && (
+                                <span
+                                    className={`inline-flex items-center gap-1 mt-1 text-[11px] font-medium opacity-65 ${
+                                        msg.role === "user" ? "text-blue-200" : "text-gray-500"
+                                    }`}
+                                >
+                                    <Mic className="w-3 h-3" />
+                                    <span>voice</span>
+                                </span>
+                            )}
                         </div>
                     </div>
                 ))}

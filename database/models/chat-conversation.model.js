@@ -7,6 +7,7 @@ const ChatConversationSchema = new Schema({
         {
             role: { type: String, enum: ['user', 'assistant'], required: true },
             content: { type: String, required: true },
+            mode: { type: String, enum: ['voice', 'text'], default: 'text' },
             createdAt: { type: Date, default: Date.now },
         }
     ],

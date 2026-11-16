@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { voiceOptions, DEFAULT_VOICE, voiceCategories } from "@/lib/constants";
 
-const VapiControls = ({ book }) => {
+const VapiControls = ({ book, messages: externalMessages, onAddMessage }) => {
     const router = useRouter();
     const [showTranscript, setShowTranscript] = useState(false);
     const [selectedVoice, setSelectedVoice] = useState(book?.persona || DEFAULT_VOICE);
@@ -26,7 +26,7 @@ const VapiControls = ({ book }) => {
         clearError,
         limitError,
         maxDurationSeconds,
-    } = useVapi(book, selectedVoice);
+    } = useVapi(book, selectedVoice, externalMessages, onAddMessage);
 
     useEffect(() => {
         if (limitError) {
@@ -54,6 +54,11 @@ const VapiControls = ({ book }) => {
     };
 
     const statusDisplay = getStatusDisplay();
+
+    // Clean transcript messages (hide the default initial greeting in transcript if present)
+    const transcriptMessages = messages.filter(
+        (m) => m.content && !m.content.startsWith("Hi! I've read")
+    );
 
     return (
         <div className="max-w-4xl mx-auto flex flex-col gap-8">
@@ -155,7 +160,7 @@ const VapiControls = ({ book }) => {
                 ) : (
                     <div className="transcript-container min-h-[400px] w-full mt-2">
                         <Transcript
-                            messages={messages}
+                            messages={transcriptMessages}
                             currentMessage={currentMessage}
                             currentUserMessage={currentUserMessage}
                         />
@@ -166,7 +171,12 @@ const VapiControls = ({ book }) => {
                     onClick={() => setShowTranscript(!showTranscript)}
                     className="mt-4 mb-4 px-6 py-2.5 rounded-full border border-gray-300 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors shadow-sm"
                 >
-                    {showTranscript ? "Hide Conversation History" : "View Conversation History"}
+                    {showTranscript
+                        ? "Hide Conversation History"
+                        : transcriptMessages.length > 0
+                        ? `View Conversation History (${transcriptMessages.length})`
+                        : "View Conversation History"
+                    }
                 </button>
             </div>
         </div>
