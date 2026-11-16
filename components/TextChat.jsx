@@ -43,12 +43,19 @@ const TextChat = ({ book }) => {
             .then((res) => res.json())
             .then((data) => {
                 if (isMounted && data.messages && data.messages.length > 0) {
-                    setMessages([defaultGreeting, ...data.messages]);
-                    try {
-                        localStorage.setItem(storageKey, JSON.stringify([defaultGreeting, ...data.messages]));
-                    } catch (e) {
-                        console.warn("Failed to cache chat:", e);
-                    }
+                    setMessages((prev) => {
+                        // Don't overwrite if user has already added messages locally
+                        if (prev.length > data.messages.length + 1) {
+                            return prev;
+                        }
+                        const merged = [defaultGreeting, ...data.messages];
+                        try {
+                            localStorage.setItem(storageKey, JSON.stringify(merged));
+                        } catch (e) {
+                            console.warn("Failed to cache chat:", e);
+                        }
+                        return merged;
+                    });
                 }
             })
             .catch((err) => console.warn("Could not load server chat history:", err));
@@ -56,7 +63,7 @@ const TextChat = ({ book }) => {
         return () => {
             isMounted = false;
         };
-    }, [book?._id]);
+    }, [book?._id, storageKey]);
 
     // Persist to localStorage whenever messages change
     useEffect(() => {

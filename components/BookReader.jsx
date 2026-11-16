@@ -33,13 +33,14 @@ const BookReader = ({ book }) => {
                 ))}
             </div>
 
-            {/* Tab Content */}
+            {/* Tab Content - Kept mounted to preserve active conversation state and draft text */}
             <div>
-                {activeTab === "voice" ? (
+                <div className={activeTab === "voice" ? "block" : "hidden"}>
                     <VapiControls book={book} />
-                ) : (
+                </div>
+                <div className={activeTab === "text" ? "block" : "hidden"}>
                     <TextChat book={book} />
-                )}
+                </div>
             </div>
         </div>
     );
