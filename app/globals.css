@@ -166,7 +166,10 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
   body {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
     @apply bg-transparent text-foreground;
   }
 }

@@ -90,7 +90,7 @@ export default function RootLayout({ children }) {
         "pk_test_Y2xlcmsuYm9va2lmaWVkLmRldmVsJA"
       }
     >
-        <html lang="en">
+        <html lang="en" className="overscroll-none">
           <head>
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png?v=20260913" sizes="96x96" />
             <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg?v=20260913" />
@@ -100,7 +100,7 @@ export default function RootLayout({ children }) {
             <link rel="manifest" href="/favicon/site.webmanifest?v=20260913" />
           </head>
           <body
-            className={`${ibmPlexSerif.variable} ${monaSans.variable} relative min-h-screen flex flex-col justify-between font-sans antialiased`}
+            className={`${ibmPlexSerif.variable} ${monaSans.variable} relative min-h-screen flex flex-col justify-between font-sans antialiased overscroll-none`}
           >
             {/* Website Lightly Blurred Background */}
             <div

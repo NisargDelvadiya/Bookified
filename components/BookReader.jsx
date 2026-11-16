@@ -388,7 +388,7 @@ const BookReader = ({ book }) => {
 
                 <div
                     ref={chatContainerRef}
-                    className="flex flex-col gap-4 min-h-[360px] max-h-[540px] overflow-y-auto px-1 py-2 scroll-smooth"
+                    className="flex flex-col gap-4 min-h-[360px] max-h-[540px] overflow-y-auto px-1 py-2 scroll-smooth overscroll-contain"
                 >
                     {messages.map((msg, i) => (
                         <div
